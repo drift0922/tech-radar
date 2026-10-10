@@ -1,0 +1,532 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>科技重大事件侦察系统</title>
+<style>
+:root{--panel:#111a2b;--line:#293852;--text:#e7edf7;--muted:#9eacc3;--blue:#65b7ff;--yellow:#f5c451;--green:#4ade80;--red:#fb7185}
+*{box-sizing:border-box}
+html,body{overflow-x:hidden;max-width:100%}
+body{margin:0;background:linear-gradient(135deg,#070b14,#0b1424 55%,#101b30);color:var(--text);font-family:Inter,Arial,"Microsoft YaHei",sans-serif}
+header{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid var(--line);position:sticky;top:0;background:#080d18ee;backdrop-filter:blur(12px);z-index:5}
+.brand{font-weight:800;font-size:14px}.brand span{color:var(--blue)}.status{font-size:11px;color:var(--muted)}
+main{max-width:900px;margin:auto;padding:18px 14px 90px}
+.page{display:none}.page.active{display:block}
+.eyebrow{color:var(--blue);font-size:11px;letter-spacing:2px;text-transform:uppercase}
+h1{font-size:22px;margin:8px 0 12px}h2{font-size:15px;margin:0 0 12px;color:var(--blue)}
+p{line-height:1.7;color:#c3cee0;font-size:14px;margin:8px 0}
+.muted{color:var(--muted)}
+.panel{background:linear-gradient(145deg,var(--panel),#0e1727);border:1px solid var(--line);border-radius:14px;padding:16px;margin:12px 0}
+button{border:0;border-radius:8px;padding:10px 14px;background:#2785e8;color:white;font-weight:700;cursor:pointer;font-size:14px}
+button.secondary{background:#24344e;color:#dce8fa;border:1px solid #3a4b68}
+button:disabled{opacity:.45}
+.controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:10px 0}
+input,select,textarea{background:#0b1423;color:var(--text);border:1px solid #34445e;border-radius:8px;padding:10px;font:inherit;width:100%}
+input[readonly]{background:#0a1017;color:#a9c9f1;border-color:#1e2c40;cursor:default}
+textarea{min-height:70px;resize:vertical}
+label{display:block;color:#cbd8eb;font-size:13px;margin:10px 0 4px}
+.small{font-size:12px}
+.ev-card{background:#0d1728;border:1px solid var(--line);border-radius:12px;padding:14px;margin:10px 0}
+.ev-head{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:8px}
+.ev-id{color:var(--blue);font-weight:800;font-size:13px}
+.ev-time{color:var(--blue);font-weight:700;font-size:15px;text-align:right}
+.ev-title{font-size:15px;font-weight:700;color:#fff;margin:6px 0}
+.ev-row{display:flex;gap:8px;font-size:13px;padding:5px 0;border-bottom:1px dashed #1e2c40}
+.ev-row:last-of-type{border-bottom:0}
+.ev-k{color:#8fa3bd;min-width:52px;flex-shrink:0}
+.ev-v{color:#dde7f5;flex:1;word-break:break-word}
+.ev-foot{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:10px;padding-top:10px;border-top:1px solid #1e2c40}
+.ev-metrics{font-size:12px;color:#c8d6ea}
+.ev-metrics b{color:var(--yellow)}
+.grade-1{background:#4a1d22;color:#fb7185;padding:2px 8px;border-radius:99px;font-size:11px;font-weight:700}
+.grade-2{background:#4a3a1d;color:#f5c451;padding:2px 8px;border-radius:99px;font-size:11px;font-weight:700}
+.grade-3{background:#1e3a5f;color:#65b7ff;padding:2px 8px;border-radius:99px;font-size:11px;font-weight:700}
+.time-tag{display:inline-block;font-size:10px;padding:2px 6px;border-radius:99px;margin-left:4px}
+.t-conf{background:#1e4530;color:#4ade80}
+.t-est{background:#453a1e;color:#f5c451}
+.t-unk{background:#3a2a2a;color:#fb7185}
+.ana-section{background:linear-gradient(145deg,#111a2b,#0e1727);border:1px solid #293852;border-radius:12px;margin:14px 0;overflow:hidden}
+.ana-title{background:#142138;color:#65b7ff;padding:11px 14px;font-weight:700;font-size:13px;border-bottom:1px solid #293852}
+.ana-field{padding:13px 14px;border-bottom:1px solid #1e2c40}
+.ana-field:last-child{border-bottom:0}
+.ana-label{color:#8fa3bd;font-size:11px;margin-bottom:6px;font-weight:700;letter-spacing:.5px}
+.ana-value{color:#e7edf7;font-size:14px;line-height:1.75;word-break:break-word}
+.ana-value ul{margin:0;padding-left:18px}
+.ana-value li{margin:5px 0}
+.bull{color:#4ade80}.bear{color:#fb7185}.neu{color:#9eacc3}
+.today-badge{background:#1e3a5f;color:#65b7ff;padding:4px 10px;border-radius:99px;font-size:12px;font-weight:700;display:inline-block}
+.error{color:var(--red)}.good{color:var(--green)}
+.footerbar{position:fixed;bottom:0;left:0;right:0;background:#080d18ee;border-top:1px solid var(--line);padding:10px 14px;display:flex;justify-content:space-between;gap:8px;z-index:6}
+.bar{height:8px;background:#1e2c40;border-radius:99px;overflow:hidden;margin:6px 0}
+.bar-in{height:100%;background:#65b7ff;width:0%;transition:width .3s}
+.six-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:6px}
+.six-item{background:#0b1423;border:1px solid #1e2c40;border-radius:8px;padding:8px 6px;text-align:center}
+.six-item .n{color:#65b7ff;font-weight:700;font-size:16px}
+.six-item .l{color:#8fa3bd;font-size:10px;margin-top:2px}
+.formula{font-family:monospace;font-size:11px;color:#8fa3bd;background:#0b1423;padding:8px;border-radius:6px;margin:6px 0;line-height:1.6}
+</style>
+<script>
+// ===== PWA 图标：深红渐变 + 地球经纬线 + 四角星 =====
+(function(){
+  const SVG = "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'>" +
+    "<defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'>" +
+    "<stop offset='0' stop-color='#c1132a'/><stop offset='1' stop-color='#5c000e'/>" +
+    "</linearGradient></defs>" +
+    "<rect width='512' height='512' rx='115' fill='url(#g)'/>" +
+    "<g opacity='0.22' stroke='#ffffff' stroke-width='6' fill='none'>" +
+    "<circle cx='256' cy='256' r='175'/>" +
+    "<ellipse cx='256' cy='256' rx='80' ry='175'/>" +
+    "<ellipse cx='256' cy='256' rx='175' ry='80'/>" +
+    "<line x1='81' y1='256' x2='431' y2='256'/>" +
+    "</g>" +
+    "<path d='M256 106 C266 186 300 220 380 230 C300 240 266 274 256 354 C246 274 212 240 132 230 C212 220 246 186 256 106 Z' fill='#ffffff'/>" +
+    "</svg>";
+  const iconUrl = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(SVG);
+
+  // favicon
+  let link = document.createElement('link');
+  link.rel = 'icon';
+  link.type = 'image/svg+xml';
+  link.href = iconUrl;
+  document.head.appendChild(link);
+
+  // apple-touch-icon（iOS 加到主屏幕用这个）
+  let at = document.createElement('link');
+  at.rel = 'apple-touch-icon';
+  at.href = iconUrl;
+  document.head.appendChild(at);
+  let atPre = document.createElement('link');
+  atPre.rel = 'apple-touch-icon-precomposed';
+  atPre.href = iconUrl;
+  document.head.appendChild(atPre);
+
+  // theme-color（安卓状态栏颜色）
+  let tc = document.createElement('meta');
+  tc.name = 'theme-color';
+  tc.content = '#8b0016';
+  document.head.appendChild(tc);
+
+  // 安卓 PWA 需要的 manifest
+  const manifest = {
+    name: "科技重大事件侦察系统",
+    short_name: "科技雷达",
+    start_url: ".",
+    scope: ".",
+    display: "standalone",
+    orientation: "portrait",
+    background_color: "#0b1424",
+    theme_color: "#8b0016",
+    icons: [
+      { src: iconUrl, sizes: "192x192", type: "image/svg+xml", purpose: "any" },
+      { src: iconUrl, sizes: "512x512", type: "image/svg+xml", purpose: "any maskable" }
+    ]
+  };
+  try {
+    const blob = new Blob([JSON.stringify(manifest)], { type: 'application/manifest+json' });
+    const murl = URL.createObjectURL(blob);
+    let ml = document.createElement('link');
+    ml.rel = 'manifest';
+    ml.href = murl;
+    document.head.appendChild(ml);
+  } catch(e) {}
+})();
+</script>
+</head>
+<body>
+<header><div class="brand">◈ <span>TECH RADAR</span> / 科技事件侦察</div><div id="status" class="status">检查连接…</div></header>
+<main>
+
+<section id="page1" class="page active">
+<div class="eyebrow">Technology Major Events Intelligence Radar</div>
+<h1>全球科技重大事件侦察系统</h1>
+<p class="small muted">张量搜索 · Gate A-D · ESS 公式 · Impact I1-I5 · Risk Value 公式 · Surprise S1-S5</p>
+
+<div class="panel">
+<h2>当前基准日期</h2>
+<div><span class="today-badge" id="todayShow">加载中…</span></div>
+</div>
+
+<div class="panel">
+<h2>🔌 连接设置（Google Gemini）</h2>
+<label>Gemini API Key</label>
+<input id="apiKey" type="password" autocomplete="new-password" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="粘贴你的 Gemini Key">
+<label>模型（点下方按钮自动获取，或手动选）</label>
+<select id="llmModel">
+<option value="gemini-3.8-flash">Gemini 3.8 Flash（推荐）</option>
+<option value="gemini-3.7-flash">Gemini 3.7 Flash</option>
+<option value="gemini-3.6-flash">Gemini 3.6 Flash</option>
+<option value="gemini-3.5-flash">Gemini 3.5 Flash</option>
+<option value="gemini-3.5-flash-lite">Gemini 3.5 Flash-Lite（最快）</option>
+<option value="gemini-3.1-flash-lite">Gemini 3.1 Flash-Lite</option>
+</select>
+<div class="controls">
+<button onclick="saveSettings()">保存</button>
+<button class="secondary" onclick="testConn()">测试连接</button>
+<button class="secondary" onclick="refreshModels()">🔄 自动获取模型列表</button>
+</div>
+<div id="llmTestState" class="muted small">尚未测试。若报 404，点「自动获取模型列表」。</div>
+<p class="small muted">Key 从 aistudio.google.com 获取。免费层每天 1500 次请求。</p>
+</div>
+
+<div class="panel">
+<h2>公式说明</h2>
+<div class="formula">ESS = R×30% + C×20% + A×15% + S×15% + P×10% + T×10%</div>
+<div class="formula">RiskValue = 基本面×25% + 技术×20% + 政策×15% + Price-in×15% + 竞争×15% + 确定性×10%</div>
+<p class="small muted">分层：≥85 一级 · 70-84 二级 · 55-69 观察 · &lt;55 过滤。事件按时间从近到远排列。</p>
+<div class="controls"><button onclick="go('page2')">▶ 进入事件总表</button></div>
+</div>
+</section>
+
+<section id="page2" class="page">
+<div class="eyebrow">Page 2 / Discovery</div>
+<h1>未来科技重大事件总表</h1>
+
+<div class="panel">
+<label>时间范围</label>
+<select id="scope"><option>未来180天</option><option>未来90天</option><option>未来30天</option></select>
+<label>关注重点（已锁定，不可修改）</label>
+<input id="focus" value="AI、半导体、数据中心电力、机器人、科技政策与科技股催化剂" readonly>
+<label>自定义搜索（可选 · 点名搜索特定公司 / 新闻 / 主题）</label>
+<textarea id="customQuery" placeholder="每行一个，或用逗号分隔。例如：&#10;NVIDIA 柏林 GTC&#10;特斯拉财报&#10;台积电 2nm 扩产&#10;OpenAI 新模型发布" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
+<p class="small muted">自定义搜索会作为额外一轮，和默认张量一起扫描。</p>
+<div class="controls"><button id="discoverBtn" onclick="discover()">开始张量侦查</button></div>
+<div class="bar"><div class="bar-in" id="prog"></div></div>
+<div id="discoverState" class="muted small">等待开始。</div>
+</div>
+
+<div class="panel">
+<h2>主事件池（按时间排序）</h2>
+<input id="filter" placeholder="筛选事件 / 公司 / 领域" oninput="renderEvents()" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+<div id="mainRows"><p class="muted small">尚未运行侦查。</p></div>
+</div>
+
+<div class="panel">
+<h2>按 ID 深度分析</h2>
+<input id="eventIds" placeholder="例如 E001" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+<div class="controls"><button onclick="analyzeSelected()">分析选中事件</button></div>
+</div>
+</section>
+
+<section id="page3" class="page">
+<div class="eyebrow">Page 3 / Deep Dive</div>
+<h1>事件深度分析</h1>
+<div id="analysisTitle" class="panel small muted">请从事件总表选择一项事件。</div>
+<div id="analysisResult"></div>
+</section>
+
+</main>
+<div class="footerbar">
+<button class="secondary" onclick="go('page1')">← 主页</button>
+<button class="secondary" onclick="go('page2')">事件总表 →</button>
+</div>
+
+<script>
+const EP='https://generativelanguage.googleapis.com/v1beta/openai/chat/completions';
+const MODELS_API='https://generativelanguage.googleapis.com/v1beta/models';
+let eventData=null;let allEvents=[];
+
+const TENSOR=[
+ {name:'AI / GPU / 半导体 / 存储',keys:'大模型发布、GPU新品、代工产能、HBM/DRAM/NAND、算力采购、芯片出口管制、晶圆厂投资、先进封装'},
+ {name:'数据中心 / 电力 / 网络 / 机器人',keys:'AI数据中心建设、电力采购、核电/天然气、电网扩容、光模块、800G/1.6T、人形机器人、Robotaxi、苹果/华为产品发布、CES'},
+ {name:'科技政策 / 融资 / 财报 / 订单',keys:'美国商务部/能源部/国防部、欧盟AI法案、半导体政策、政府采购、AI融资、IPO、科技巨头财报、GPU订单、云订单、国家AI战略'}
+];
+
+function calcESS(r,c,a,s,p,t){
+ return Math.round(r*0.30 + c*0.20 + a*0.15 + s*0.15 + p*0.10 + t*0.10);
+}
+function essGrade(ess){
+ if(ess>=85)return {level:1,text:'一级重大',cls:'grade-1'};
+ if(ess>=70)return {level:2,text:'二级重要',cls:'grade-2'};
+ if(ess>=55)return {level:3,text:'观察',cls:'grade-3'};
+ return {level:0,text:'过滤',cls:''};
+}
+function calcRisk(f,t,p,pd,c,ct){
+ return Math.round(f*0.25 + t*0.20 + p*0.15 + pd*0.15 + c*0.15 + ct*0.10);
+}
+function riskStatus(v){
+ if(v>=81)return {t:'极度乐观',c:'bull'};
+ if(v>=61)return {t:'明显乐观',c:'bull'};
+ if(v>=21)return {t:'偏乐观',c:'bull'};
+ if(v>=-20)return {t:'多空平衡',c:'neu'};
+ if(v>=-60)return {t:'偏悲观',c:'bear'};
+ if(v>=-80)return {t:'明显悲观',c:'bear'};
+ return {t:'极度悲观',c:'bear'};
+}
+function gatePass(g){return g===true||g==='true'||g==='Pass'||g==='pass'||g===1;}
+
+function dateKey(t){
+ if(!t)return 99999999;
+ const ym=t.match(/(\d{4})年/);
+ if(!ym)return 99999999;
+ const y=parseInt(ym[1]);
+ if(t.indexOf('上半年')>=0)return y*10000+600;
+ if(t.indexOf('下半年')>=0)return y*10000+1200;
+ const mm=t.match(/(\d{1,2})月/);
+ const m=mm?parseInt(mm[1]):99;
+ const dm=t.match(/(\d{1,2})日/);
+ const d=dm?parseInt(dm[1]):99;
+ return y*10000+m*100+d;
+}
+
+function today(){const d=new Date();return d.getFullYear()+'年'+(d.getMonth()+1)+'月'+d.getDate()+'日';}
+function go(id){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo(0,0);}
+
+async function refreshModels(){
+ const k=document.getElementById('apiKey').value.trim();
+ const box=document.getElementById('llmTestState');
+ if(k.length<20){box.innerHTML='<span class="error">请先填 Key 再点自动获取</span>';return;}
+ box.textContent='正在向 Google 获取可用模型列表…';
+ try{
+  const r=await fetch(MODELS_API+'?key='+encodeURIComponent(k));
+  const d=await r.json();
+  if(!r.ok)throw new Error((d.error&&d.error.message)||('HTTP '+r.status));
+  const all=d.models||[];
+  const chat=all.filter(m=>{
+   const methods=m.supportedGenerationMethods||[];
+   if(!methods.includes('generateContent'))return false;
+   const n=(m.name||'').toLowerCase();
+   if(n.includes('embedding'))return false;
+   if(n.includes('aqa'))return false;
+   if(n.includes('imagen'))return false;
+   return true;
+  }).map(m=>(m.name||'').replace(/^models\//,''));
+  if(!chat.length){box.innerHTML='<span class="error">没有拿到可用模型</span>';return;}
+  chat.sort((a,b)=>{
+   const fa=/flash/.test(a)?0:1, fb=/flash/.test(b)?0:1;
+   if(fa!==fb)return fa-fb;
+   return b.localeCompare(a,'en',{numeric:true});
+  });
+  const sel=document.getElementById('llmModel');
+  sel.innerHTML=chat.map(n=>'<option value="'+n+'">'+n+'</option>').join('');
+  localStorage.setItem('orModels',JSON.stringify(chat));
+  localStorage.setItem('orModel',chat[0]);
+  box.innerHTML='<span class="good">成功获取 '+chat.length+' 个可用模型，已选：'+chat[0]+'</span>';
+  document.getElementById('status').textContent='模型已刷新';
+ }catch(e){
+  box.innerHTML='<span class="error">自动获取失败：'+e.message+'</span>';
+ }
+}
+function loadModelsFromCache(){
+ try{
+  const arr=JSON.parse(localStorage.getItem('orModels')||'null');
+  if(arr&&arr.length){
+   const sel=document.getElementById('llmModel');
+   sel.innerHTML=arr.map(n=>'<option value="'+n+'">'+n+'</option>').join('');
+   const cur=localStorage.getItem('orModel');
+   if(cur)sel.value=cur;
+  }
+ }catch(e){}
+}
+
+function saveSettings(){
+ const k=document.getElementById('apiKey').value.trim();
+ const m=document.getElementById('llmModel').value;
+ if(k.length<20){document.getElementById('llmTestState').innerHTML='<span class="error">Key 太短，请检查是否粘贴完整</span>';return false;}
+ localStorage.setItem('orKey',k);localStorage.setItem('orModel',m);
+ document.getElementById('llmTestState').textContent='已保存，模型：'+m;return true;
+}
+function loadSettings(){
+ const k=localStorage.getItem('orKey')||'';
+ if(k)document.getElementById('apiKey').value=k;
+ loadModelsFromCache();
+ const m=localStorage.getItem('orModel')||'';
+ if(m){const sel=document.getElementById('llmModel');if(sel.querySelector('option[value="'+m+'"]'))sel.value=m;}
+}
+async function callLLM(messages){
+ const k=localStorage.getItem('orKey');
+ const m=localStorage.getItem('orModel')||document.getElementById('llmModel').value;
+ if(!k)throw new Error('请先填 Key 并保存。');
+ let r;
+ try{r=await fetch(EP,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+k},body:JSON.stringify({model:m,messages,temperature:0.4})});}
+ catch(e){throw new Error('无法连接：'+e.message)}
+ const raw=await r.text();let d;
+ try{d=JSON.parse(raw)}catch(e){throw new Error('返回非 JSON：'+raw.slice(0,180))}
+ if(!r.ok)throw new Error((d.error&&d.error.message)||('HTTP '+r.status+'，模型：'+m));
+ const out=d.choices&&d.choices[0]&&d.choices[0].message&&d.choices[0].message.content;
+ if(!out)throw new Error('模型无输出');
+ return out;
+}
+async function testConn(){
+ if(!saveSettings())return;
+ const box=document.getElementById('llmTestState');box.textContent='测试中…';
+ try{const out=await callLLM([{role:'user',content:'只回复：连接成功'}]);box.innerHTML='<span class="good">连接成功：'+out.slice(0,50)+'</span>';document.getElementById('status').textContent='已连接';}
+ catch(e){box.innerHTML='<span class="error">失败：'+e.message+'</span>';}
+}
+function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function arr(v){return Array.isArray(v)?v.join('、'):(v||'')}
+function timeTag(s){
+ if(!s)return '';
+ if(s.indexOf('已确认')>=0)return '<span class="time-tag t-conf">已确认</span>';
+ if(s.indexOf('预计')>=0)return '<span class="time-tag t-est">预计</span>';
+ return '<span class="time-tag t-unk">待核实</span>';
+}
+function isFuture(t){
+ if(!t)return true;
+ const m=t.match(/(\d{4})年/);if(!m)return true;
+ return parseInt(m[1])>=new Date().getFullYear();
+}
+function tryParse(out){
+ let clean=out.replace(/^```json\s*/i,'').replace(/^```\s*/,'').replace(/\s*```$/,'').trim();
+ const s=clean.indexOf('{');const e=clean.lastIndexOf('}');
+ if(s>=0&&e>s)clean=clean.slice(s,e+1);
+ return JSON.parse(clean);
+}
+
+async function runRound(round,scope,t){
+ const prompt='【当前日期】'+t+'。只能列出该日期之后的未来事件。\n【本轮维度】'+round.name+'\n【关键词】'+round.keys+'\n【时间范围】'+scope+'\n\n列出最多8条未来科技重大事件。每条必须给出六维评分（0-100整数）和 Gate 判断：\n- R 市场重定价潜力\n- C 产业链穿透力\n- A 主体重要性\n- S 预期差\n- P 政策杠杆\n- T 时间紧迫性\n- gate_a 是否科技相关(true/false)\n- gate_b 是否真实事件(true/false)\n- gate_c 是否新增信息(true/false)\n- gate_d 是否可验证(true/false)\n- impact 影响范围(I1/I2/I3/I4/I5)\n\n【时间强制】官方公布→"YYYY年M月D日"+date_status="已确认"；惯例可推→"YYYY年M月"+date_status="预计（基于行业惯例）"；仅范围→"YYYY年上半年"+date_status="待核实"。禁止全部写"待核实"。\n\n严格输出JSON：\n{"main_events":[{"beijing_time":"2026年12月","date_status":"预计（基于行业惯例）","event":"事件名","entity":"主体","type":"类型","domains":["领域"],"R":80,"C":75,"A":90,"S":70,"P":60,"T":85,"gate_a":true,"gate_b":true,"gate_c":true,"gate_d":true,"impact":"I3","why_important":"重要性"}]}';
+ const out=await callLLM([{role:'system',content:'你是未来科技事件助手。当前日期'+t+'，只输出该日之后的事件。'},{role:'user',content:prompt}]);
+ return tryParse(out).main_events||[];
+}
+
+async function discover(){
+ const btn=document.getElementById('discoverBtn');btn.disabled=true;
+ const prog=document.getElementById('prog');prog.style.width='0%';
+ const scope=document.getElementById('scope').value;
+ const t=today();
+ const list=TENSOR.slice();
+ const focus=document.getElementById('focus').value.trim();
+ if(focus)list.push({name:'用户关注重点', keys: focus});
+ const custom=document.getElementById('customQuery').value.trim();
+ if(custom){
+  const items=custom.split(/[\n,，;；]+/).map(s=>s.trim()).filter(Boolean);
+  if(items.length)list.push({name:'自定义点名搜索', keys: items.join('、')});
+ }
+ document.getElementById('discoverState').textContent='并行扫描 '+list.length+' 个维度，请稍候…';
+ let done=0;
+ const tasks=list.map(r=>{
+  const timeout=new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),90000));
+  return Promise.race([runRound(r,scope,t),timeout])
+   .catch(()=>[])
+   .then(items=>{done++;prog.style.width=Math.round(done/list.length*100)+'%';return items;});
+ });
+ const allResults=await Promise.all(tasks);
+ let raw=allResults.flat();
+ const seen=new Set();const uniq=[];
+ raw.forEach(e=>{
+  const key=((e.event||'')+'|'+(e.entity||'')).toLowerCase().replace(/\s/g,'');
+  if(key&&!seen.has(key)){seen.add(key);uniq.push(e)}
+ });
+ const passed=[];
+ uniq.forEach(e=>{
+  if(!(gatePass(e.gate_a)&&gatePass(e.gate_b)&&gatePass(e.gate_c)&&gatePass(e.gate_d)))return;
+  if(!isFuture(e.beijing_time))return;
+  const ess=calcESS(Number(e.R)||50,Number(e.C)||50,Number(e.A)||50,Number(e.S)||50,Number(e.P)||50,Number(e.T)||50);
+  const g=essGrade(ess);
+  if(g.level===0)return;
+  passed.push(Object.assign({},e,{ESS:ess,ESS_level:g.level,ESS_text:g.text,ESS_cls:g.cls}));
+ });
+ passed.sort((a,b)=>{
+  const da=dateKey(a.beijing_time),db=dateKey(b.beijing_time);
+  if(da!==db)return da-db;
+  return b.ESS-a.ESS;
+ });
+ passed.forEach((e,i)=>{e.id='E'+String(i+1).padStart(3,'0')});
+ eventData={main_events:passed};allEvents=passed;
+ document.getElementById('discoverState').textContent='完成：扫描 '+list.length+' 轮，原始 '+raw.length+' 条 → 通过 Gate + ESS ≥55 共 '+passed.length+' 条。已按时间从近到远排序。';
+ renderEvents();
+ btn.disabled=false;
+}
+
+function renderEvents(){
+ const q=(document.getElementById('filter').value||'').toLowerCase();
+ const rows=allEvents.filter(e=>JSON.stringify(e).toLowerCase().includes(q));
+ if(!rows.length){document.getElementById('mainRows').innerHTML='<p class="muted small">没有符合条件的事件。</p>';return;}
+ document.getElementById('mainRows').innerHTML=rows.map(e=>
+  '<div class="ev-card">'
+  +'<div class="ev-head"><div class="ev-id">'+esc(e.id)+'</div><div class="ev-time">'+esc(e.beijing_time||'-')+timeTag(e.date_status||'')+'</div></div>'
+  +'<div class="ev-title">'+esc(e.event)+'</div>'
+  +'<div class="ev-row"><div class="ev-k">主体</div><div class="ev-v">'+esc(e.entity||'-')+'</div></div>'
+  +'<div class="ev-row"><div class="ev-k">领域</div><div class="ev-v">'+esc(arr(e.domains)||'-')+'</div></div>'
+  +'<div class="ev-row"><div class="ev-k">说明</div><div class="ev-v">'+esc(e.why_important||'-')+'</div></div>'
+  +'<div class="six-grid">'
+  +'<div class="six-item"><div class="n">'+esc(e.R||0)+'</div><div class="l">R重定价</div></div>'
+  +'<div class="six-item"><div class="n">'+esc(e.C||0)+'</div><div class="l">C产业链</div></div>'
+  +'<div class="six-item"><div class="n">'+esc(e.A||0)+'</div><div class="l">A主体</div></div>'
+  +'<div class="six-item"><div class="n">'+esc(e.S||0)+'</div><div class="l">S预期差</div></div>'
+  +'<div class="six-item"><div class="n">'+esc(e.P||0)+'</div><div class="l">P政策</div></div>'
+  +'<div class="six-item"><div class="n">'+esc(e.T||0)+'</div><div class="l">T紧迫</div></div>'
+  +'</div>'
+  +'<div class="ev-foot"><div class="ev-metrics">ESS <b>'+esc(e.ESS)+'</b> <span class="'+e.ESS_cls+'">'+esc(e.ESS_text)+'</span> · Impact '+esc(e.impact||'-')+'</div>'
+  +'<button onclick="selectEvent(\''+esc(e.id)+'\')">深度分析</button></div>'
+  +'</div>'
+ ).join('');
+}
+
+function selectEvent(id){const e=allEvents.find(x=>x.id===id);if(e)analyzeEvent(e)}
+async function analyzeSelected(){
+ const ids=document.getElementById('eventIds').value.split(',').map(x=>x.trim()).filter(Boolean);
+ if(!ids.length)return alert('请输入事件 ID');
+ const e=allEvents.find(x=>x.id===ids[0]);
+ if(!e)return alert('找不到该 ID');
+ await analyzeEvent(e);
+}
+
+async function analyzeEvent(e){
+ go('page3');
+ document.getElementById('analysisTitle').innerHTML='<b>'+esc(e.id)+' · '+esc(e.event)+'</b><br><span class="muted small">'+esc(e.beijing_time||'-')+timeTag(e.date_status||'')+' · ESS '+esc(e.ESS)+' · '+esc(e.ESS_text)+'</span>';
+ document.getElementById('analysisResult').innerHTML='<div class="panel small muted">正在分析…</div>';
+ try{
+  const t=today();
+  const prompt='今天是'+t+'。分析以下未来科技事件：\n'+JSON.stringify(e,null,2)+'\n\n给出六维 Risk Value 评分（-100~+100）和 Surprise：\n- f_fundamental 基本面/产业需求\n- f_tech 产品/技术结果\n- f_policy 政策/政府\n- f_pricedin 市场预期/Price-in\n- f_compete 竞争/供应链\n- f_certainty 信息确定性\n- surprise S1~S5\n\n严格输出JSON：\n{"time_confidence":"已确认/预计/待核实","summary":"总结","facts":["已知1"],"unknowns":["未核实1"],"impact_path":["路径1"],"scenarios":[{"direction":"利多","probability":40,"reason":"原因"}],"positives":["利多1"],"negatives":["利空1"],"sources":["来源1"],"f_fundamental":20,"f_tech":30,"f_policy":10,"f_pricedin":-10,"f_compete":15,"f_certainty":25,"surprise":"S3"}';
+  const out=await callLLM([{role:'user',content:prompt}]);
+  let a;
+  try{a=tryParse(out);}catch(err){renderFallback(out);return;}
+  renderAnalysis(a,e);
+ }catch(err){
+  document.getElementById('analysisResult').innerHTML='<div class="panel error">'+esc(err.message)+'</div>';
+ }
+}
+
+function renderAnalysis(a,orig){
+ const rv=calcRisk(Number(a.f_fundamental)||0,Number(a.f_tech)||0,Number(a.f_policy)||0,Number(a.f_pricedin)||0,Number(a.f_compete)||0,Number(a.f_certainty)||0);
+ const st=riskStatus(rv);
+ let h='';
+ h+='<div class="ana-section"><div class="ana-title">① 基本信息</div>';
+ h+='<div class="ana-field"><div class="ana-label">时间确认度</div><div class="ana-value">'+esc(a.time_confidence||'-')+'</div></div>';
+ h+='<div class="ana-field"><div class="ana-label">总结</div><div class="ana-value">'+esc(a.summary||'-')+'</div></div></div>';
+ h+='<div class="ana-section"><div class="ana-title">② 情景概率</div>';
+ const sc=a.scenarios||[];
+ if(sc.length){sc.forEach(s=>{
+  const cls=s.direction==='利多'?'bull':(s.direction==='利空'?'bear':'neu');
+  h+='<div class="ana-field"><div class="ana-label"><span class="'+cls+'">'+esc(s.direction)+'</span> · '+esc(s.probability)+'%</div><div class="ana-value">'+esc(s.reason||'')+'</div></div>';
+ });}else{h+='<div class="ana-field"><div class="ana-value muted">无数据</div></div>';}
+ h+='</div>';
+ h+='<div class="ana-section"><div class="ana-title">③ Risk Value 六维加权</div>';
+ h+='<div class="ana-field"><div class="six-grid">'
+  +'<div class="six-item"><div class="n">'+esc(a.f_fundamental||0)+'</div><div class="l">基本面25%</div></div>'
+  +'<div class="six-item"><div class="n">'+esc(a.f_tech||0)+'</div><div class="l">技术20%</div></div>'
+  +'<div class="six-item"><div class="n">'+esc(a.f_policy||0)+'</div><div class="l">政策15%</div></div>'
+  +'<div class="six-item"><div class="n">'+esc(a.f_pricedin||0)+'</div><div class="l">Price-in15%</div></div>'
+  +'<div class="six-item"><div class="n">'+esc(a.f_compete||0)+'</div><div class="l">竞争15%</div></div>'
+  +'<div class="six-item"><div class="n">'+esc(a.f_certainty||0)+'</div><div class="l">确定性10%</div></div>'
+  +'</div><div class="ana-value" style="margin-top:10px;font-size:16px">Risk Value = <b class="'+st.c+'">'+rv+'</b> <span class="'+st.c+'">'+st.t+'</span></div></div>';
+ h+='</div>';
+ h+='<div class="ana-section"><div class="ana-title">④ Surprise Score</div>';
+ h+='<div class="ana-field"><div class="ana-value">'+esc(a.surprise||'-')+'</div></div></div>';
+ h+='<div class="ana-section"><div class="ana-title">⑤ 已知 vs 未核实</div>';
+ h+='<div class="ana-field"><div class="ana-label">已知</div><div class="ana-value">'+((a.facts||[]).length?'<ul>'+a.facts.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul>':'<span class="muted">-</span>')+'</div></div>';
+ h+='<div class="ana-field"><div class="ana-label">待核实</div><div class="ana-value">'+((a.unknowns||[]).length?'<ul>'+a.unknowns.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul>':'<span class="muted">-</span>')+'</div></div></div>';
+ h+='<div class="ana-section"><div class="ana-title">⑥ 影响传导路径</div>';
+ h+='<div class="ana-field"><div class="ana-value">'+((a.impact_path||[]).length?'<ul>'+a.impact_path.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul>':'<span class="muted">-</span>')+'</div></div></div>';
+ h+='<div class="ana-section"><div class="ana-title">⑦ 利多 / 利空</div>';
+ h+='<div class="ana-field"><div class="ana-label">利多</div><div class="ana-value">'+((a.positives||[]).length?'<ul>'+a.positives.map(x=>'<li class="bull">'+esc(x)+'</li>').join('')+'</ul>':'<span class="muted">-</span>')+'</div></div>';
+ h+='<div class="ana-field"><div class="ana-label">利空</div><div class="ana-value">'+((a.negatives||[]).length?'<ul>'+a.negatives.map(x=>'<li class="bear">'+esc(x)+'</li>').join('')+'</ul>':'<span class="muted">-</span>')+'</div></div></div>';
+ h+='<div class="ana-section"><div class="ana-title">⑧ 需查证的官方来源</div>';
+ h+='<div class="ana-field"><div class="ana-value">'+((a.sources||[]).length?'<ul>'+a.sources.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul>':'<span class="muted">-</span>')+'</div></div></div>';
+ h+='<p class="small muted" style="text-align:center;margin:14px 0">[模型生成 · 未联网核验]</p>';
+ document.getElementById('analysisResult').innerHTML=h;
+}
+
+function renderFallback(text){
+ const lines=text.split(/\n+/).map(s=>s.trim()).filter(Boolean);
+ let h='<div class="ana-section"><div class="ana-title">分析结果（未结构化，按段落拆分）</div>';
+ if(!lines.length){h+='<div class="ana-field"><div class="ana-value">'+esc(text)+'</div></div>';}
+ else{lines.forEach(l=>{h+='<div class="ana-field"><div class="ana-value">'+esc(l)+'</div></div>';});}
+ h+='</div>';
+ document.getElementById('analysisResult').innerHTML=h;
+}
+
+document.getElementById('todayShow').textContent=today();
+loadSettings();
+</script>
+</body></html>
