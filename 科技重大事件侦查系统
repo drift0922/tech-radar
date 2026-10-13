@@ -1,0 +1,1468 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>科技重大事件侦察系统</title>
+<meta name="theme-color" content="#000000">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="科技侦察">
+<link rel="manifest" id="pwa-manifest">
+<link rel="apple-touch-icon" id="pwa-apple-icon">
+<link rel="icon" id="pwa-icon-192" sizes="192x192">
+<link rel="icon" id="pwa-icon-512" sizes="512x512">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font:14px/1.55 -apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;background:#070a11;color:#e6edf7;min-height:100vh;background-image:radial-gradient(900px 420px at 50% -8%,rgba(75,141,253,.12),transparent 65%);background-repeat:no-repeat;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent}
+.header{position:sticky;top:0;z-index:50;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid #1d2838;background:rgba(7,10,17,.9);backdrop-filter:blur(14px)}
+.logo{font-size:15px;font-weight:600;line-height:1.2;display:flex;align-items:center;gap:8px}
+.logo .mark{width:22px;height:22px;flex-shrink:0}
+.logo small{display:block;font-size:9.5px;color:#5c6c85;font-weight:400;letter-spacing:.7px;text-transform:uppercase;margin-top:2px}
+.hdr-r{display:flex;align-items:center;gap:8px}
+.pill{font-size:11px;padding:4px 10px;border-radius:99px;border:1px solid #26344a;color:#5c6c85;background:#0d1420;white-space:nowrap}
+.pill.ok{color:#4ade80;border-color:rgba(34,197,94,.35);background:rgba(34,197,94,.08)}
+.btn{font-family:inherit;font-size:13px;padding:9px 14px;border-radius:9px;border:1px solid #26344a;background:#182031;color:#e6edf7;cursor:pointer;transition:.15s;white-space:nowrap}
+.btn:hover{background:#22304a}
+.btn:active{transform:scale(.97)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.btn-p{background:#4b8dfd;border-color:#4b8dfd;color:#fff;font-weight:500}
+.btn-p:hover{background:#3b7be8}
+.btn-sm{font-size:12px;padding:7px 12px}
+.btn-lg{font-size:15px;padding:14px 34px;border-radius:11px}
+.btn-icon{padding:8px 12px;font-size:13px}
+.wrap{max-width:900px;margin:0 auto;padding:16px 14px 40px}
+.card{background:#101725;border:1px solid #1d2838;border-radius:12px;padding:16px;margin-bottom:14px}
+.cfg-panel{display:none;margin-bottom:14px}
+.cfg-panel.on{display:block}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:640px){.grid2{grid-template-columns:1fr}}
+label{font-size:12px;color:#8b9bb4;display:block;margin-bottom:5px;font-weight:500}
+input,select{font-family:inherit;width:100%;font-size:13.5px;padding:10px 12px;border-radius:9px;border:1px solid #26344a;background:#0a0f19;color:#e6edf7;outline:none;margin-bottom:11px;-webkit-appearance:none}
+input:focus,select:focus{border-color:#4b8dfd;box-shadow:0 0 0 3px rgba(75,141,253,.12)}
+select{cursor:pointer;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8'><path d='M0 0l6 8 6-8z' fill='%234b8dfd'/></svg>");background-repeat:no-repeat;background-position:right 12px center;padding-right:34px}
+.model-row{display:flex;gap:8px;align-items:flex-start}
+.model-row select{flex:1;margin-bottom:0}
+.model-row .btn{height:39px;margin-bottom:11px}
+.sect{font-size:11px;letter-spacing:1px;color:#5c6c85;text-transform:uppercase;font-weight:600;padding-bottom:8px;margin-bottom:12px;border-bottom:1px solid #1d2838}
+.det{font-size:11.5px;color:#5c6c85;min-height:17px;margin:-6px 0 10px}
+.det.ok{color:#4ade80}.det.err{color:#f87171;font-weight:600}
+.hint{font-size:11px;color:#5c6c85;margin-top:2px;line-height:1.6}
+.cfg-acts{display:flex;gap:8px;justify-content:flex-end;margin-top:10px}
+.page{display:none}.page.on{display:block}
+.hero{text-align:center;padding:56px 12px 40px}
+.hero .tag{display:inline-block;font-size:10.5px;letter-spacing:1.4px;color:#4b8dfd;border:1px solid rgba(75,141,253,.3);background:rgba(75,141,253,.08);padding:5px 14px;border-radius:99px;margin-bottom:20px;text-transform:uppercase}
+.hero h1{font-size:27px;font-weight:700;margin-bottom:12px;background:linear-gradient(180deg,#fff,#93a9c8);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.hero p{color:#8b9bb4;max-width:580px;margin:0 auto 30px;font-size:13.5px;line-height:1.7}
+.hero .meta{display:flex;gap:18px;justify-content:center;flex-wrap:wrap;margin-top:38px;font-size:11px;color:#5c6c85}
+.hero .meta b{display:block;color:#e6edf7;font-size:16px;font-weight:600;margin-bottom:3px}
+@media(max-width:480px){.hero h1{font-size:22px}}
+.list-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.list-head h2{font-size:15.5px;font-weight:600;line-height:1.3}
+.list-head .sub{font-size:12px;color:#5c6c85;margin-top:3px;line-height:1.5}
+.list-head .acts{display:flex;gap:8px;flex-wrap:wrap}
+.ev-list{display:flex;flex-direction:column;gap:11px;margin-bottom:22px}
+.ev-card{background:#101725;border:1px solid #1d2838;border-radius:14px;padding:14px 16px 12px;cursor:pointer;transition:.15s}
+.ev-card:hover{border-color:#3b7be8;background:#131c2e}
+.ev-card.static{cursor:default}
+.ev-card.static:hover{border-color:#1d2838;background:#101725}
+.ev-head{display:flex;align-items:center;gap:7px;margin-bottom:10px;flex-wrap:wrap}
+.ev-idx{color:#5c6c85;font-size:11.5px;font-weight:700}
+.ev-title{font-size:15.5px;font-weight:600;color:#fff;margin-bottom:9px;line-height:1.4;word-break:break-word}
+.ev-meta{display:flex;flex-wrap:wrap;gap:5px 9px;font-size:12.5px;color:#8b9bb4;margin-bottom:8px}
+.ev-meta .sep{color:#2b3a52}
+.ev-time{font-size:12px;color:#5c6c85;margin-bottom:9px}
+.ev-note{font-size:12.5px;color:#c3cfe0;padding:9px 12px;background:#0d1420;border-left:2px solid #4b8dfd;border-radius:0 8px 8px 0;margin-bottom:10px;line-height:1.6}
+.ev-cta{font-size:11.5px;color:#4b8dfd;text-align:right;font-weight:500}
+.badge{display:inline-block;font-size:11px;padding:3px 8px;border-radius:6px;font-weight:600;white-space:nowrap}
+.b-g{background:rgba(34,197,94,.14);color:#4ade80}
+.b-o{background:rgba(245,158,11,.14);color:#fbbf24}
+.b-r{background:rgba(239,68,68,.14);color:#f87171}
+.b-b{background:rgba(75,141,253,.14);color:#7fb2ff}
+.b-p{background:rgba(168,85,247,.14);color:#c084fc}
+.b-d{background:rgba(139,155,180,.1);color:#8b9bb4}
+.dots{display:inline-flex;gap:3px;vertical-align:middle;margin-left:2px}
+.dot{width:5px;height:5px;border-radius:50%;background:#2b3a52}
+.dot.on{background:#4ade80}
+.empty{text-align:center;padding:40px 20px;color:#5c6c85;font-size:13px;line-height:1.7}
+.log{font:11px/1.75 ui-monospace,Menlo,Consolas,monospace;max-height:320px;overflow-y:auto;background:#080c14;border:1px solid #1d2838;border-radius:10px;padding:11px 13px;margin-bottom:14px;color:#61738d}
+.log .ok{color:#4ade80}.log .err{color:#f87171}.log .info{color:#7fb2ff}.log .warn{color:#fbbf24}
+.stats{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:14px}
+.stat{flex:1;min-width:calc(50% - 6px);background:#101725;border:1px solid #1d2838;border-radius:11px;padding:11px 14px}
+.stat b{display:block;font-size:19px;font-weight:700;color:#fff}
+.stat span{font-size:11px;color:#5c6c85}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#182031;border:1px solid #26344a;padding:11px 18px;border-radius:10px;font-size:13px;opacity:0;pointer-events:none;transition:.28s;z-index:99;max-width:calc(100vw - 32px);text-align:center}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(-4px)}
+.toast.err{background:#7f1d1d;border-color:#f87171;color:#fff}
+.kv{display:grid;grid-template-columns:82px 1fr;gap:8px 14px;font-size:13px}
+.kv dt{color:#5c6c85}.kv dd{color:#e6edf7;word-break:break-word}
+.summary{background:#0d1420;border-left:2px solid #4b8dfd;padding:14px 16px;border-radius:0 10px 10px 0;font-size:13.5px;line-height:1.7}
+.summary h2{font-size:15px;margin:14px 0 6px;color:#fff}
+.summary h3{font-size:14px;margin:14px 0 6px;color:#4b8dfd}
+.summary h4{font-size:13px;margin:12px 0 5px;color:#8b9bb4}
+.summary p{margin:6px 0;color:#c3cfe0}
+.summary ul{margin:6px 0 6px 20px;color:#c3cfe0}
+.summary li{margin:4px 0}
+.summary code{background:#182031;padding:1px 5px;border-radius:4px;font-size:12px;color:#7fb2ff}
+.ev-ref{font-size:12.5px;margin-bottom:9px;line-height:1.6}
+.ev-ref a{color:#4b8dfd;font-size:11.5px;word-break:break-all}
+.note-box{font-size:11.5px;color:#5c6c85;background:#0d1420;border:1px solid #1d2838;border-radius:8px;padding:10px 13px;margin-top:10px;line-height:1.7}
+.note-box code{color:#7fb2ff}
+</style>
+</head>
+<body>
+
+<div class="header">
+<div class="logo">
+  <svg class="mark" viewBox="0 0 1024 1024" aria-hidden="true">
+    <rect width="1024" height="1024" rx="180" fill="#000000"/>
+    <rect x="312" y="180" width="533" height="510" rx="25" fill="#000000" stroke="#FFFFFF" stroke-width="5"/>
+    <rect x="273" y="225" width="529" height="523" rx="25" fill="#000000" stroke="#FFFFFF" stroke-width="5"/>
+    <rect x="240" y="265" width="520" height="535" fill="#000000"/>
+    <polygon points="290,738 476,515 693,322 508,545" fill="#FFFFFF"/>
+    <circle cx="492" cy="530" r="60" fill="#FFFFFF"/>
+    <path d="M452 512 Q492 528 532 512 Q512 540 512 588 L472 588 Q472 540 452 512 Z" fill="#000000"/>
+    <circle cx="346" cy="380" r="20" fill="#FFFFFF"/>
+    <circle cx="492" cy="380" r="20" fill="#FFFFFF"/>
+    <circle cx="640" cy="380" r="20" fill="#FFFFFF" stroke="#000000" stroke-width="6"/>
+    <circle cx="346" cy="530" r="20" fill="#FFFFFF"/>
+    <circle cx="640" cy="530" r="20" fill="#FFFFFF"/>
+    <circle cx="346" cy="683" r="20" fill="#FFFFFF" stroke="#000000" stroke-width="6"/>
+    <circle cx="492" cy="683" r="20" fill="#FFFFFF"/>
+    <circle cx="640" cy="683" r="20" fill="#FFFFFF"/>
+    <rect x="228" y="265" width="28" height="535" rx="6" fill="#FFFFFF"/>
+    <rect x="228" y="265" width="90" height="30" rx="6" fill="#FFFFFF"/>
+    <rect x="228" y="770" width="90" height="30" rx="6" fill="#FFFFFF"/>
+    <rect x="732" y="265" width="28" height="535" rx="6" fill="#FFFFFF"/>
+    <rect x="670" y="265" width="90" height="30" rx="6" fill="#FFFFFF"/>
+    <rect x="670" y="770" width="90" height="30" rx="6" fill="#FFFFFF"/>
+  </svg>
+  <span>科技重大事件侦察系统<small>Technology Major Events Intelligence Radar</small></span>
+</div>
+<div class="hdr-r">
+<span id="status" class="pill">未配置</span>
+<button class="btn btn-icon" onclick="toggleCfg()">⚙ 设置</button>
+</div>
+</div>
+
+<div class="wrap">
+<div class="cfg-panel" id="cfgPanel">
+<div class="card">
+<div class="cfg-hd" style="display:flex;justify-content:space-between;margin-bottom:14px">
+<strong style="font-size:14px">🔑 API 配置</strong>
+<span class="close" style="font-size:12px;color:#8b9bb4;cursor:pointer;padding:4px 8px" onclick="toggleCfg()">收起 ✕</span>
+</div>
+<div class="grid2">
+<div>
+<div class="sect">推理模型 LLM</div>
+<label>Provider</label>
+<select id="rProv" onchange="onProv()">
+<option value="openai">OpenAI</option>
+<option value="anthropic">Anthropic</option>
+<option value="google">Google Gemini</option>
+<option value="xai">xAI Grok</option>
+<option value="openrouter">OpenRouter</option>
+<option value="deepseek">DeepSeek</option>
+<option value="groq">Groq</option>
+<option value="custom">自定义 OpenAI 兼容</option>
+</select>
+<label>API Key</label>
+<input type="password" id="rKey" placeholder="sk-..." oninput="detKey()" autocomplete="off">
+<div class="det" id="rDet"></div>
+<div id="rBaseWrap" style="display:none"><label>Base URL</label><input id="rBase" placeholder="https://api.example.com/v1"></div>
+<label>模型</label>
+<div class="model-row">
+<select id="rModel"></select>
+<button class="btn btn-sm btn-p" id="fetchBtn" onclick="detectModels()">🔄 检测</button>
+</div>
+<div class="det" id="mDet"></div>
+</div>
+<div>
+<div class="sect">联网搜索</div>
+<label>Provider</label>
+<select id="sProv">
+<option value="serper">Serper（推荐）</option>
+<option value="tavily">Tavily</option>
+<option value="exa">Exa</option>
+<option value="brave">Brave</option>
+<option value="perplexity">Perplexity</option>
+<option value="langsearch">LangSearch</option>
+</select>
+<label>API Key</label>
+<input type="password" id="sKey" placeholder="Key" autocomplete="off">
+<label>附加参数</label>
+<input id="sExtra" placeholder="LangSearch 1-50（默认20）" autocomplete="off">
+<label>侦察强度</label>
+<select id="sPower"><option value="18">快速（80 条证据）</option><option value="28" selected>标准（100 条证据）</option><option value="40">深度（120 条证据）</option></select>
+<label>代理（可选）</label>
+<input id="proxy" placeholder="https://.../?url={url}">
+<div class="note-box" style="margin-top:6px">
+<b>搜索 Provider 提示：</b>LangSearch 对英文 OR 布尔语法支持差、覆盖偏窄，实测主池常偏少。若需稳定覆盖 <b>强烈建议优先 Serper 或 Tavily</b>。
+</div>
+</div>
+</div>
+<div style="display:flex;gap:8px;justify-content:flex-end;margin-top:10px">
+<button class="btn" onclick="clearCfg()">清除</button>
+<button class="btn btn-p" onclick="saveCfg()">保存并收起</button>
+</div>
+</div>
+</div>
+
+<div class="page on" id="p1">
+<div class="hero">
+<div class="tag">Intelligence Radar</div>
+<h1>科技重大事件侦察系统</h1>
+<p>双轨发现（种子系列 + 结构盲搜）· 增量发现 · 只收未来 · 近窗优先 · ESS 分级</p>
+<button class="btn btn-p btn-lg" onclick="start()" id="startBtn">▶ 开始侦查</button>
+<div class="meta">
+<div><b>2</b>发现轨</div>
+<div><b>6</b>ESS 因子</div>
+<div><b>4</b>硬闸门</div>
+<div><b>180</b>天窗口</div>
+</div>
+</div>
+</div>
+
+<div class="page" id="p2">
+<div class="list-head">
+<div><h2>未来科技重大事件</h2><div class="sub">只显示今天及以后的事件 · 按时间近→远优先 · 点击卡片进入分析</div></div>
+<div class="acts">
+<button class="btn btn-sm" onclick="start()">🔄 重新侦查</button>
+<button class="btn btn-sm btn-p" onclick="continueScan()" id="continueBtn">➕ 继续侦查</button>
+<button class="btn btn-sm" onclick="go(1)">← 主页</button>
+</div>
+</div>
+<div class="stats" id="stats"></div>
+<div class="log" id="log" style="display:none"></div>
+<div class="ev-list" id="evList"><div class="empty">尚未侦查</div></div>
+<div class="list-head" style="margin-top:6px">
+<div><h2>⚡ 非固定监控池</h2><div class="sub">Shock Override · 无固定日期但可能突发的重大变量</div></div>
+</div>
+<div class="ev-list" id="shockList"><div class="empty">空</div></div>
+</div>
+
+<div class="page" id="p3">
+<div class="list-head">
+<div><h2 id="dTitle">深度分析</h2><div class="sub" id="dSub"></div></div>
+<button class="btn btn-sm" onclick="go(2)">← 返回</button>
+</div>
+<div id="dBody"><div class="empty">请从列表选择事件</div></div>
+</div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ================= PWA / 主屏幕图标 ================= */
+(function(){
+  var SVG = [
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">',
+    '<rect width="1024" height="1024" rx="180" fill="#000000"/>',
+    '<rect x="312" y="180" width="533" height="510" rx="25" fill="#000000" stroke="#FFFFFF" stroke-width="5"/>',
+    '<rect x="273" y="225" width="529" height="523" rx="25" fill="#000000" stroke="#FFFFFF" stroke-width="5"/>',
+    '<rect x="240" y="265" width="520" height="535" fill="#000000"/>',
+    '<polygon points="290,738 476,515 693,322 508,545" fill="#FFFFFF"/>',
+    '<circle cx="492" cy="530" r="60" fill="#FFFFFF"/>',
+    '<path d="M452 512 Q492 528 532 512 Q512 540 512 588 L472 588 Q472 540 452 512 Z" fill="#000000"/>',
+    '<circle cx="346" cy="380" r="20" fill="#FFFFFF"/>',
+    '<circle cx="492" cy="380" r="20" fill="#FFFFFF"/>',
+    '<circle cx="640" cy="380" r="20" fill="#FFFFFF" stroke="#000000" stroke-width="6"/>',
+    '<circle cx="346" cy="530" r="20" fill="#FFFFFF"/>',
+    '<circle cx="640" cy="530" r="20" fill="#FFFFFF"/>',
+    '<circle cx="346" cy="683" r="20" fill="#FFFFFF" stroke="#000000" stroke-width="6"/>',
+    '<circle cx="492" cy="683" r="20" fill="#FFFFFF"/>',
+    '<circle cx="640" cy="683" r="20" fill="#FFFFFF"/>',
+    '<rect x="228" y="265" width="28" height="535" rx="6" fill="#FFFFFF"/>',
+    '<rect x="228" y="265" width="90" height="30" rx="6" fill="#FFFFFF"/>',
+    '<rect x="228" y="770" width="90" height="30" rx="6" fill="#FFFFFF"/>',
+    '<rect x="732" y="265" width="28" height="535" rx="6" fill="#FFFFFF"/>',
+    '<rect x="670" y="265" width="90" height="30" rx="6" fill="#FFFFFF"/>',
+    '<rect x="670" y="770" width="90" height="30" rx="6" fill="#FFFFFF"/>',
+    '</svg>'
+  ].join('');
+  var svgDataUrl = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(SVG);
+
+  function rasterize(size){
+    return new Promise(function(resolve, reject){
+      var img = new Image();
+      img.onload = function(){
+        try{
+          var c = document.createElement('canvas');
+          c.width = size; c.height = size;
+          var ctx = c.getContext('2d');
+          ctx.clearRect(0,0,size,size);
+          ctx.drawImage(img, 0, 0, size, size);
+          resolve(c.toDataURL('image/png'));
+        }catch(e){ reject(e); }
+      };
+      img.onerror = function(e){ reject(e); };
+      img.src = svgDataUrl;
+    });
+  }
+  function setLink(id, rel, href, sizes){
+    var el = document.getElementById(id);
+    if(!el){ el = document.createElement('link'); el.id = id; document.head.appendChild(el); }
+    el.rel = rel;
+    el.type = 'image/png';
+    if(sizes) el.sizes = sizes;
+    el.href = href;
+  }
+  Promise.all([rasterize(192), rasterize(512), rasterize(180)]).then(function(r){
+    var png192 = r[0], png512 = r[1], png180 = r[2];
+    setLink('pwa-icon-192', 'icon', png192, '192x192');
+    setLink('pwa-icon-512', 'icon', png512, '512x512');
+    var apple = document.getElementById('pwa-apple-icon');
+    if(!apple){ apple = document.createElement('link'); apple.id='pwa-apple-icon'; apple.rel='apple-touch-icon'; document.head.appendChild(apple); }
+    apple.href = png180;
+    apple.setAttribute('sizes', '180x180');
+
+    var manifest = {
+      name: '科技重大事件侦察系统',
+      short_name: '科技侦察',
+      display: 'standalone',
+      background_color: '#000000',
+      theme_color: '#000000',
+      start_url: '.',
+      icons: [
+        { src: png192, sizes: '192x192', type: 'image/png', purpose: 'any maskable' },
+        { src: png512, sizes: '512x512', type: 'image/png', purpose: 'any maskable' }
+      ]
+    };
+    var blob = new Blob([JSON.stringify(manifest)], {type:'application/manifest+json'});
+    var mUrl = URL.createObjectURL(blob);
+    var mLink = document.getElementById('pwa-manifest');
+    if(!mLink){ mLink = document.createElement('link'); mLink.id='pwa-manifest'; mLink.rel='manifest'; document.head.appendChild(mLink); }
+    mLink.href = mUrl;
+    try{ console.log('[PWA] 主屏幕图标已就绪：192 / 512 / 180'); }catch(e){}
+  }).catch(function(err){
+    try{ console.warn('[PWA] 图标栅格化失败，回退为 SVG data URL：', err); }catch(e){}
+    var svgIcon = document.getElementById('pwa-icon-512');
+    if(!svgIcon){ svgIcon = document.createElement('link'); svgIcon.id='pwa-icon-512'; document.head.appendChild(svgIcon); }
+    svgIcon.rel='icon'; svgIcon.type='image/svg+xml'; svgIcon.href=svgDataUrl;
+  });
+})();
+</script>
+
+<script>
+/* ================= 原有侦查逻辑 ================= */
+window.onerror=function(m,u,l){
+  var b=document.getElementById('errBox');
+  if(!b){b=document.createElement('div');b.id='errBox';b.style.cssText='position:fixed;bottom:0;left:0;right:0;background:#7f1d1d;color:#fff;padding:10px 16px;font-size:12px;font-family:monospace;z-index:9999;max-height:120px;overflow:auto';document.body.appendChild(b)}
+  b.textContent='【JS错误】'+m+' @ '+l;return false;
+};
+function $(i){return document.getElementById(i)}
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function sleep(ms){return new Promise(function(r){setTimeout(r,ms)})}
+var events=[],shocks=[],hitPool=[],corpusHits=[],running=false;
+var excludeHints=null;
+var corpusHistory=[];
+
+var PROV={
+openai:{base:'https://api.openai.com/v1',models:['gpt-4o','gpt-4o-mini','gpt-4.1','gpt-4.1-mini','o4-mini','o3-mini']},
+anthropic:{base:'https://api.anthropic.com',models:['claude-sonnet-4-20250514','claude-3-7-sonnet-20250219','claude-3-5-sonnet-20241022','claude-3-5-haiku-20241022']},
+google:{base:'',models:['gemini-2.5-pro','gemini-2.5-flash','gemini-2.0-flash','gemini-1.5-pro','gemini-1.5-flash']},
+xai:{base:'https://api.x.ai/v1',models:['grok-3','grok-3-mini','grok-2-1212']},
+openrouter:{base:'https://openrouter.ai/api/v1',models:['anthropic/claude-sonnet-4','openai/gpt-4o','google/gemini-2.5-pro','x-ai/grok-3','deepseek/deepseek-chat']},
+deepseek:{base:'https://api.deepseek.com/v1',models:['deepseek-chat','deepseek-reasoner']},
+groq:{base:'https://api.groq.com/openai/v1',models:['llama-3.3-70b-versatile','llama-3.1-8b-instant']},
+custom:{base:'',models:['default']}
+};
+var IMPACT_RANK={I1:1,I2:2,I3:3,I4:4,I5:5};
+var ESS_W={market:.20,chain:.20,entity:.15,gap:.15,policy:.15,timing:.15};
+
+var SEED_SERIES=[
+  {name:'GTC', cat:'event'},
+  {name:'GTC Europe', cat:'event'},
+  {name:'GTC Asia', cat:'event'},
+  {name:'SEMICON West', cat:'event'},
+  {name:'SEMICON Japan', cat:'event'},
+  {name:'SEMICON China', cat:'event'},
+  {name:'SEMICON Europa', cat:'event'},
+  {name:'OCP Global Summit', cat:'event'},
+  {name:'AWS re:Invent', cat:'event'},
+  {name:'Microsoft Ignite', cat:'event'},
+  {name:'CES', cat:'event'},
+  {name:'MWC Barcelona', cat:'event'},
+  {name:'Computex', cat:'event'},
+  {name:'Hot Chips', cat:'event'},
+  {name:'ISSCC', cat:'event'},
+  {name:'foundry earnings', cat:'earnings'},
+  {name:'semiconductor earnings call', cat:'earnings'},
+  {name:'GPU earnings', cat:'earnings'},
+  {name:'chipmaker guidance', cat:'earnings'},
+  {name:'foundry capex guidance', cat:'earnings'},
+  {name:'export control update', cat:'policy'},
+  {name:'AI act enforcement', cat:'policy'},
+  {name:'chip subsidy program', cat:'policy'}
+];
+
+function toast(m,isErr){
+  var t=$('toast');t.textContent=m;t.className='toast on'+(isErr?' err':'');
+  clearTimeout(t._t);t._t=setTimeout(function(){t.className='toast'},isErr?4200:2600);
+}
+function log(m,c){
+  var el=$('log');el.style.display='block';
+  var d=document.createElement('div');if(c)d.className=c;
+  d.textContent='['+new Date().toLocaleTimeString('zh-CN',{hour12:false})+'] '+m;
+  el.appendChild(d);el.scrollTop=el.scrollHeight;
+}
+function go(n){
+  var ps=document.querySelectorAll('.page');
+  for(var i=0;i<ps.length;i++)ps[i].classList.remove('on');
+  $('p'+n).classList.add('on');window.scrollTo(0,0);
+}
+function apiUrl(u){
+  var px=$('proxy').value.trim();if(!px)return u;
+  if(px.indexOf('{url}')>=0)return px.replace('{url}',encodeURIComponent(u));
+  return px.replace(/\/+$/,'')+'/'+u;
+}
+function toggleCfg(){$('cfgPanel').classList.toggle('on')}
+
+function onProv(){
+  var p=$('rProv').value;
+  $('rBaseWrap').style.display=(p==='custom')?'block':'none';
+  var info=PROV[p]||PROV.openai,h='';
+  for(var i=0;i<info.models.length;i++)h+='<option value="'+esc(info.models[i])+'">'+esc(info.models[i])+'</option>';
+  $('rModel').innerHTML=h;
+}
+function detKey(){
+  var k=$('rKey').value.trim(),el=$('rDet');
+  if(!k){el.textContent='';el.className='det';updSt();return}
+  var map=[['sk-ant-','anthropic'],['sk-or-','openrouter'],['xai-','xai'],['AIza','google'],['gsk_','groq'],['sk-','openai']];
+  for(var i=0;i<map.length;i++){
+    if(k.indexOf(map[i][0])===0){$('rProv').value=map[i][1];onProv();el.textContent='✓ 已识别为 '+map[i][1];el.className='det ok';updSt();return}
+  }
+  el.textContent='未匹配前缀，请手动选 Provider';el.className='det';updSt();
+}
+function updSt(){
+  var rk=$('rKey').value.trim(),sk=$('sKey').value.trim(),st=$('status');
+  if(rk&&sk){st.textContent='双 API 就绪';st.className='pill ok'}
+  else if(rk||sk){st.textContent='缺另一半';st.className='pill'}
+  else{st.textContent='未配置';st.className='pill'}
+}
+function modelFilter(name){
+  var n=String(name).toLowerCase();
+  var B=['whisper','tts','dall-e','dalle','embedding','embed-','moderation','audio','realtime','transcribe','image','imagen','rerank','codex-mini','computer-use','vision-preview','lyria','nano-banana','deep-research','antigravity','robotics','omni','gemma','clip','veo','music','sound','video'];
+  for(var i=0;i<B.length;i++)if(n.indexOf(B[i])>=0)return false;
+  return true;
+}
+function sortModels(list){
+  var PREF=['gemini-3.5-flash','gemini-3.5-pro','gemini-3.1-pro','gemini-3.1-flash','gemini-2.5-pro','gemini-2.5-flash','gpt-4o','gpt-4.1','claude-sonnet-4','claude-3-7-sonnet','deepseek-chat','deepseek-reasoner','grok-3','llama-3.3-70b'];
+  return list.sort(function(a,b){
+    var ba=/preview|latest|exp|beta|alpha|experimental|tuning|customtools/i.test(a)?1:0;
+    var bb=/preview|latest|exp|beta|alpha|experimental|tuning|customtools/i.test(b)?1:0;
+    if(ba!==bb)return ba-bb;
+    var pa=999,pb=999;
+    for(var i=0;i<PREF.length;i++){if(a.indexOf(PREF[i])>=0&&i<pa)pa=i;if(b.indexOf(PREF[i])>=0&&i<pb)pb=i}
+    if(pa!==pb)return pa-pb;
+    var la=/-lite/i.test(a)?1:0,lb=/-lite/i.test(b)?1:0;
+    if(la!==lb)return la-lb;
+    return a.localeCompare(b);
+  });
+}
+function fetchModels(){
+  var p=$('rProv').value,key=$('rKey').value.trim(),info=PROV[p]||PROV.openai;
+  var base=(p==='custom'?$('rBase').value.trim():info.base).replace(/\/+$/,'');
+  var url,headers={};
+  if(p==='anthropic'){url='https://api.anthropic.com/v1/models?limit=100';headers={'x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'}}
+  else if(p==='google'){url='https://generativelanguage.googleapis.com/v1beta/models?key='+encodeURIComponent(key)}
+  else if(p==='openrouter'){url='https://openrouter.ai/api/v1/models'}
+  else if(p==='custom'){if(!base)throw new Error('需先填 Base URL');url=base+'/models';headers={'Authorization':'Bearer '+key}}
+  else{if(!key)throw new Error('请先填 API Key');url=base+'/models';headers={'Authorization':'Bearer '+key}}
+  return fetch(apiUrl(url),{headers:headers}).then(function(res){
+    if(!res.ok)return res.text().then(function(b){throw new Error('HTTP '+res.status+'：'+b.slice(0,180))});
+    return res.json().then(function(d){
+      var list=[];
+      if(p==='google'){var a=d.models||[];for(var i=0;i<a.length;i++){var n=String(a[i].name||'').replace(/^models\//,'');if(!n)continue;var ms=a[i].supportedGenerationMethods||[];var ok=false;for(var j=0;j<ms.length;j++)if(ms[j]==='generateContent'){ok=true;break}if(ok)list.push(n)}}
+      else if(p==='anthropic'){var a2=d.data||[];for(var k=0;k<a2.length;k++)if(a2[k]&&a2[k].id)list.push(a2[k].id)}
+      else{var a3=d.data||d.models||[];for(var m=0;m<a3.length;m++){var id=a3[m]&&(a3[m].id||a3[m].name);if(id)list.push(id)}}
+      var f=[],seen={};for(var n2=0;n2<list.length;n2++){var s=String(list[n2]).trim();if(!s||seen[s])continue;seen[s]=1;if(modelFilter(s))f.push(s)}
+      return sortModels(f);
+    });
+  });
+}
+function detectModels(){
+  var btn=$('fetchBtn'),md=$('mDet'),p=$('rProv').value,key=$('rKey').value.trim();
+  if(p!=='openrouter'&&!key){md.textContent='⚠ 请先填 API Key';md.className='det err';return}
+  btn.disabled=true;var ot=btn.textContent;btn.textContent='⏳';
+  md.textContent='拉取中…';md.className='det';
+  var prev=$('rModel').value;
+  fetchModels().then(function(list){
+    if(!list.length){md.textContent='⚠ 未拉取到';md.className='det err';return}
+    var h='';for(var i=0;i<list.length;i++)h+='<option value="'+esc(list[i])+'">'+esc(list[i])+'</option>';
+    $('rModel').innerHTML=h;
+    var ch=list[0];
+    if(prev){for(var j=0;j<list.length;j++)if(list[j]===prev){ch=prev;break}}
+    $('rModel').value=ch;
+    md.textContent='✓ 共 '+list.length+' 个。已选中：'+ch;md.className='det ok';
+  }).catch(function(err){md.textContent='✖ '+err.message;md.className='det err'})
+  .then(function(){btn.disabled=false;btn.textContent=ot});
+}
+function saveCfg(){
+  var c={rProv:$('rProv').value,rKey:$('rKey').value.trim(),rBase:$('rBase').value.trim(),rModel:$('rModel').value,sProv:$('sProv').value,sKey:$('sKey').value.trim(),sExtra:$('sExtra').value.trim(),sPower:$('sPower').value,proxy:$('proxy').value.trim()};
+  try{localStorage.setItem('radar_cfg_v23',JSON.stringify(c))}catch(e){}
+  updSt();toast('已保存');$('cfgPanel').classList.remove('on');
+}
+function clearCfg(){
+  try{localStorage.removeItem('radar_cfg_v23')}catch(e){}
+  ['rKey','sKey','rBase','proxy','sExtra'].forEach(function(id){$(id).value=''});
+  onProv();detKey();updSt();toast('已清除');
+}
+function loadCfg(){
+  var c={};try{c=JSON.parse(localStorage.getItem('radar_cfg_v23')||'{}')}catch(e){}
+  if(c.rProv)$('rProv').value=c.rProv;
+  if(c.rKey)$('rKey').value=c.rKey;
+  if(c.rBase)$('rBase').value=c.rBase;
+  if(c.sProv)$('sProv').value=c.sProv;
+  if(c.sKey)$('sKey').value=c.sKey;
+  if(c.sExtra)$('sExtra').value=c.sExtra;
+  if(c.sPower)$('sPower').value=c.sPower;
+  if(c.proxy)$('proxy').value=c.proxy;
+  onProv();
+  if(c.rModel){var opts=$('rModel').options;for(var i=0;i<opts.length;i++)if(opts[i].value===c.rModel){$('rModel').selectedIndex=i;break}}
+  detKey();updSt();$('cfgPanel').classList.remove('on');
+}
+function callLLM(system,user,opts){
+  opts=opts||{};
+  var p=$('rProv').value,key=$('rKey').value.trim(),model=$('rModel').value;
+  if(!model)throw new Error('未选择模型');
+  var maxTok=opts.maxTokens||4096,temp=(opts.temperature==null)?0.2:opts.temperature;
+  var info=PROV[p]||PROV.openai;
+  var base=(p==='custom'?$('rBase').value.trim():info.base).replace(/\/+$/,'');
+  var url,init;
+  if(p==='anthropic'){
+    url='https://api.anthropic.com/v1/messages';
+    init={method:'POST',headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:model,max_tokens:maxTok,temperature:temp,system:system,messages:[{role:'user',content:user}]})};
+  }else if(p==='google'){
+    url='https://generativelanguage.googleapis.com/v1beta/models/'+encodeURIComponent(model)+':generateContent?key='+encodeURIComponent(key);
+    init={method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({systemInstruction:{parts:[{text:system}]},contents:[{role:'user',parts:[{text:user}]}],generationConfig:{maxOutputTokens:maxTok,temperature:temp}})};
+  }else{
+    if(!base)throw new Error('未填 Base URL');
+    url=base+'/chat/completions';
+    init={method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+key},body:JSON.stringify({model:model,temperature:temp,max_tokens:maxTok,messages:[{role:'system',content:system},{role:'user',content:user}]})};
+  }
+  return fetch(apiUrl(url),init).then(function(res){
+    if(!res.ok)return res.text().then(function(b){throw new Error('【'+p+' '+res.status+'】'+b.slice(0,300))});
+    return res.json().then(function(d){
+      if(p==='anthropic')return((d.content||[]).map(function(c){return c.text||''})).join('');
+      if(p==='google'){var parts=((d.candidates||[])[0]||{}).content;return((parts&&parts.parts)||[]).map(function(x){return x.text||''}).join('')}
+      return(((d.choices||[])[0]||{}).message||{}).content||'';
+    });
+  }).catch(function(err){
+    if(err.message.indexOf('【')===0)throw err;
+    throw new Error('【网络/CORS】'+p+' 失败：'+err.message);
+  });
+}
+
+function doSearch(q){
+  var p=$('sProv').value,key=$('sKey').value.trim();
+  var extra=$('sExtra').value.trim();
+  var url,init,parse;
+  if(p==='tavily'){url='https://api.tavily.com/search';init={method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({api_key:key,query:q,search_depth:'advanced',max_results:8})};parse=function(d){return(d.results||[]).map(function(r){return{title:r.title||'',url:r.url||'',content:r.content||''}})}}
+  else if(p==='serper'){url='https://google.serper.dev/search';init={method:'POST',headers:{'Content-Type':'application/json','X-API-KEY':key},body:JSON.stringify({q:q,num:10})};parse=function(d){return(d.organic||[]).map(function(r){return{title:r.title||'',url:r.link||'',content:r.snippet||''}})}}
+  else if(p==='exa'){url='https://api.exa.ai/search';init={method:'POST',headers:{'Content-Type':'application/json','x-api-key':key},body:JSON.stringify({query:q,num_results:8,contents:{text:{maxCharacters:700}}})};parse=function(d){return(d.results||[]).map(function(r){return{title:r.title||'',url:r.url||'',content:r.text||''}})}}
+  else if(p==='brave'){url='https://api.search.brave.com/res/v1/web/search?q='+encodeURIComponent(q)+'&count=10';init={headers:{'X-Subscription-Token':key,'Accept':'application/json'}};parse=function(d){return(((d.web||{}).results)||[]).map(function(r){return{title:r.title||'',url:r.url||'',content:r.description||''}})}}
+  else if(p==='perplexity'){url='https://api.perplexity.ai/chat/completions';init={method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+key},body:JSON.stringify({model:'sonar',messages:[{role:'user',content:q}]})};parse=function(d){var c=(((d.choices||[])[0]||{}).message||{}).content||'';return c?[{title:'Perplexity',url:'',content:c}]:[]}}
+  else if(p==='langsearch'){
+    var lsCount=20;
+    if(extra&&/^\d+$/.test(extra)){var pc=parseInt(extra,10);if(pc>=1&&pc<=50)lsCount=pc}
+    url='https://api.langsearch.com/v1/web-search';
+    init={method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+key},body:JSON.stringify({query:q,count:lsCount,freshness:'noLimit',contents:{text:true}})};
+    parse=function(d){var arr=((d.data||{}).webPages||{}).value||[];return arr.map(function(r){return{title:r.name||'',url:r.url||'',content:r.text||r.snippet||''}})};
+  }
+  else return Promise.resolve([]);
+  return fetch(apiUrl(url),init).then(function(res){
+    if(!res.ok)return res.text().then(function(){return[]});
+    return res.json().then(function(d){try{return parse(d).filter(function(x){return x.title||x.content})}catch(e){return[]}});
+  }).catch(function(){return[]});
+}
+
+function parseTimeRange(str){
+  str=String(str||'').trim();
+  if(!str||str==='TBA'||str==='—'||str==='未知'||str.toLowerCase()==='unknown'){
+    return {start:null,end:null,precision:'none'};
+  }
+  var rangeM=str.match(/(20\d{2})[-\/\.](\d{1,2})[-\/\.](\d{1,2})\s*(?:[~～至到\-—]|\s+to\s+)\s*(20\d{2}[-\/\.])?(\d{1,2})[-\/\.]?(\d{1,2})?/i);
+  if(rangeM){
+    var y1=+rangeM[1],m1=+rangeM[2],d1=+rangeM[3];
+    var y2=rangeM[4]?+rangeM[4].replace(/[-\/\.]/,''):y1;
+    var m2=rangeM[5]?+rangeM[5]:m1;
+    var d2=rangeM[6]?+rangeM[6]:d1;
+    return {start:Date.UTC(y1,m1-1,d1),end:Date.UTC(y2,m2-1,d2,23,59,59),precision:'day'};
+  }
+  var dayM=str.match(/(20\d{2})[-\/\.](\d{1,2})[-\/\.](\d{1,2})/);
+  if(dayM){
+    var y=+dayM[1],m=+dayM[2],d=+dayM[3];
+    return {start:Date.UTC(y,m-1,d),end:Date.UTC(y,m-1,d,23,59,59),precision:'day'};
+  }
+  var ymM=str.match(/(20\d{2})[-\/\.](\d{1,2})\b/);
+  if(ymM){
+    var y2=+ymM[1],m2=+ymM[2];
+    var endDay=new Date(Date.UTC(y2,m2,0)).getUTCDate();
+    return {start:Date.UTC(y2,m2-1,1),end:Date.UTC(y2,m2-1,endDay,23,59,59),precision:'month'};
+  }
+  var MONTHS=['january','february','march','april','may','june','july','august','september','october','november','december'];
+  var mY=str.match(/([A-Za-z]{3,9})\s+(20\d{2})/);
+  if(mY){
+    var mname=mY[1].toLowerCase();
+    var mi=MONTHS.indexOf(mname);
+    if(mi<0){for(var i=0;i<MONTHS.length;i++){if(MONTHS[i].indexOf(mname.slice(0,3))===0){mi=i;break}}}
+    if(mi>=0){
+      var y3=+mY[2];
+      var endDay2=new Date(Date.UTC(y3,mi+1,0)).getUTCDate();
+      return {start:Date.UTC(y3,mi,1),end:Date.UTC(y3,mi,endDay2,23,59,59),precision:'month'};
+    }
+  }
+  var qM=str.match(/Q([1-4])\s*(20\d{2})/i);
+  if(qM){
+    var q=+qM[1],yq=+qM[2];
+    var startM=(q-1)*3;
+    return {start:Date.UTC(yq,startM,1),end:Date.UTC(yq,startM+3,0,23,59,59),precision:'quarter'};
+  }
+  var yM=str.match(/\b(20\d{2})\b/);
+  if(yM){
+    var yy=+yM[1];
+    return {start:Date.UTC(yy,0,1),end:Date.UTC(yy,11,31,23,59,59),precision:'year'};
+  }
+  return {start:null,end:null,precision:'none'};
+}
+
+function buildQueries(){
+  var now=new Date();
+  var y=now.getFullYear();
+  var m=now.getMonth();
+  var MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  function monthAt(off){var t=m+off,yy=y+Math.floor(t/12),mm=((t%12)+12)%12;return MONTHS[mm]+' '+yy}
+  var m0=monthAt(0),m1=monthAt(1),m2=monthAt(2),m3=monthAt(3);
+  var nearTimes=[m0,m1];
+  var midTimes=[m2,m3];
+
+  var queries=[],seen={};
+  var counters={S:0,A:0,B:0,C:0};
+  function add(q,cat){
+    q=String(q||'').replace(/\s+/g,' ').trim();
+    if(!q||seen[q])return;
+    seen[q]=1;queries.push(q);
+    if(cat&&counters[cat]!==undefined) counters[cat]++;
+  }
+
+  var limit=parseInt($('sPower').value,10)||28;
+
+  function seedExcluded(seedName){
+    if(!excludeHints) return false;
+    var sn=seedName.toLowerCase();
+    for(var k in excludeHints.keywords){
+      if(sn.indexOf(k)>=0) return true;
+    }
+    return false;
+  }
+
+  var seedLimit=Math.ceil(limit*0.30);
+  var seedUsed=0;
+  var catOrder=['event','earnings','policy'];
+  if(excludeHints && excludeHints.rotation===1) catOrder=['earnings','policy','event'];
+  if(excludeHints && excludeHints.rotation===2) catOrder=['policy','event','earnings'];
+  for(var co=0;co<catOrder.length&&seedUsed<seedLimit;co++){
+    for(var si=0;si<SEED_SERIES.length&&seedUsed<seedLimit;si++){
+      var seed=SEED_SERIES[si];
+      if(seed.cat!==catOrder[co]) continue;
+      if(seedExcluded(seed.name)) continue;
+      var t=nearTimes[seedUsed%nearTimes.length];
+      add(seed.name+' '+t,'S');
+      seedUsed++;
+    }
+  }
+
+  var structLimit=limit-seedUsed;
+  if(structLimit<0) structLimit=0;
+  var A_count=Math.ceil(structLimit*0.40);
+  var B_count=Math.ceil(structLimit*0.25);
+  var C_count=structLimit-A_count-B_count;
+  if(C_count<0) C_count=0;
+
+  var regions=['Europe','Asia','"Asia Pacific"','"North America"'];
+
+  if(excludeHints && excludeHints.preferRegions){
+    var pref=excludeHints.preferRegions;
+    var merged=[];
+    for(var pr=0;pr<pref.length;pr++){
+      for(var rg2=0;rg2<regions.length;rg2++){
+        if(regions[rg2]===pref[pr] && merged.indexOf(pref[pr])<0) merged.push(pref[pr]);
+      }
+    }
+    for(var rg3=0;rg3<regions.length;rg3++){
+      if(merged.indexOf(regions[rg3])<0) merged.push(regions[rg3]);
+    }
+    regions=merged;
+  }
+
+  for(var a=0;a<A_count;a++){
+    var rg=regions[a%regions.length];
+    var tA=nearTimes[a%nearTimes.length];
+    var vA=a%4;
+    if(vA===0) add('developer conference '+rg+' '+tA,'A');
+    else if(vA===1) add('developer conference '+rg+' upcoming','A');
+    else if(vA===2) add('keynote '+rg+' AI '+tA,'A');
+    else add('developer event '+rg+' '+tA,'A');
+  }
+
+  var bSectors=['semiconductor','foundry','"chip maker"','GPU','"data center"'];
+  for(var b=0;b<B_count;b++){
+    var sector=bSectors[b%bSectors.length];
+    var tB=nearTimes[b%nearTimes.length];
+    var vB=b%5;
+    if(vB===0) add('earnings call semiconductor '+tB,'B');
+    else if(vB===1) add('earnings call foundry '+tB,'B');
+    else if(vB===2) add('investor day '+sector+' '+tB,'B');
+    else if(vB===3) add('capex guidance '+sector+' '+tB,'B');
+    else add('guidance semiconductor '+tB,'B');
+  }
+
+  var themes=['semiconductor','"AI infrastructure"','"optical interconnect"','"HBM memory"','"silicon photonics"','"data center power"','"liquid cooling"','"advanced packaging"'];
+  if(excludeHints && excludeHints.preferThemes){
+    var prefT=excludeHints.preferThemes;
+    var mergedT=[];
+    for(var pt=0;pt<prefT.length;pt++){
+      if(mergedT.indexOf(prefT[pt])<0) mergedT.push(prefT[pt]);
+    }
+    for(var th2=0;th2<themes.length;th2++){
+      if(mergedT.indexOf(themes[th2])<0) mergedT.push(themes[th2]);
+    }
+    themes=mergedT;
+  }
+  for(var c=0;c<C_count;c++){
+    var th=themes[c%themes.length];
+    var tC=nearTimes[c%nearTimes.length];
+    add(th+' conference OR summit '+tC,'C');
+  }
+
+  if(queries.length<limit){
+    var extras=[
+      'semiconductor conference '+m2,
+      '"AI infrastructure" summit '+m3,
+      '"optical interconnect" forum '+m2,
+      'export control update '+m2,
+      'chip subsidy announcement '+m3
+    ];
+    for(var e=0;e<extras.length&&queries.length<limit;e++) add(extras[e],'C');
+  }
+
+  buildQueries._counters=counters;
+  return queries.slice(0,limit);
+}
+
+function prioritizeHits(hits){
+  var now=new Date(),y=now.getFullYear(),m=now.getMonth();
+  var MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  var nearLabels=[];
+  for(var i=0;i<3;i++){
+    var total=m+i,yy=y+Math.floor(total/12),mm=((total%12)+12)%12,mn=MONTHS[mm];
+    nearLabels.push(mn+' '+yy,mn+' '+String(yy).slice(-2),mn.slice(0,3)+' '+yy,mn.slice(0,3)+' '+String(yy).slice(-2));
+  }
+  var aggregators=/10times|eventbrite|conferenceindex|allevents|meetup\.com|linkedin\.com\/events|facebook\.com\/events|eventful|bizzabo|swapcard|hopin/i;
+
+  function score(h){
+    var text=((h.title||'')+' '+(h.content||'')).toLowerCase();
+    var url=(h.url||'').toLowerCase();
+    var s=0;
+    var monthHit=false;
+    for(var i=0;i<nearLabels.length;i++){
+      if(text.indexOf(nearLabels[i].toLowerCase())>=0){s+=15;monthHit=true;break}
+    }
+    var strongEvent=false;
+    if(/earnings call|earnings conference|investor day|guidance update|quarterly results|capex guidance/i.test(text)){s+=18;strongEvent=true}
+    if(/keynote|developer conference|developer summit|developer event/i.test(text)){s+=15;strongEvent=true}
+    if(/investor relations|IR calendar|financial calendar/i.test(text)){s+=12;strongEvent=true}
+    if(strongEvent&&monthHit) s+=12;
+    if(/\.gov|\.mil|\.edu/.test(url)) s+=6;
+    if(/investor|newsroom|press|\/ir\/|\/events|calendar|register|agenda/i.test(url)) s+=6;
+    if(/conference|summit|symposium|forum|expo|guidance|capex/i.test(text)) s+=4;
+    if(text.indexOf(String(y))>=0) s+=3;
+    if(text.indexOf(String(y+1))>=0) s+=1;
+    if(aggregators.test(url)) s-=8;
+    if(/event is over|past event|this event has ended|已结束|回顾|本次会议已于/i.test(text)) s-=15;
+    var oldYearMatch=url.match(/\/(20\d{2})\//);
+    if(oldYearMatch){
+      var uy=parseInt(oldYearMatch[1],10);
+      if(uy<y-1) s-=10;
+      else if(uy<y) s-=5;
+    }
+    if(/\b(20(19|2[0-4]))\b/.test(text)&&!monthHit) s-=5;
+    if(excludeHints && excludeHints.entities){
+      for(var en in excludeHints.entities){
+        if(text.indexOf(en)>=0){ s-=6; break; }
+      }
+    }
+    return s;
+  }
+  var scored=hits.map(function(h){return{h:h,s:score(h)}});
+  scored.sort(function(a,b){return b.s-a.s});
+  return scored.map(function(x){return x.h});
+}
+
+function dedupe(list){
+  var seen={},out=[];
+  for(var i=0;i<list.length;i++){
+    var h=list[i];
+    var raw=(h.url||h.title||'').replace(/^https?:\/\/(www\.)?/,'').split('?')[0];
+    if(!raw||seen[raw])continue;
+    seen[raw]=1;out.push(h);
+  }
+  return out;
+}
+function runSearchTensor(){
+  var qs=buildQueries();
+  var c=buildQueries._counters||{S:0,A:0,B:0,C:0};
+  var ab=c.A+c.B;
+  var track2=c.A+c.B+c.C;
+  var total=qs.length;
+  var seedPct=total?Math.round(c.S/total*100):0;
+  var abPctInTrack2=track2?Math.round(ab/track2*100):0;
+  log('搜索张量启动：'+total+' 条 · 轨1 种子 '+c.S+' 条('+seedPct+'%) · 轨2 盲搜 A='+c.A+' B='+c.B+' C='+c.C+'（A+B 占轨2 '+abPctInTrack2+'%）','info');
+  var now=new Date();
+  log('  当前日期基准：'+now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0'));
+  for(var d=0;d<Math.min(qs.length,12);d++)log('  · '+qs[d]);
+  if(qs.length>12)log('  · …共 '+qs.length+' 条');
+  var all=[],i=0;
+  function next(){
+    if(i>=qs.length){
+      var dd=dedupe(all);
+      log('原始 '+all.length+' 条 → 去重后 '+dd.length+' 条','ok');
+      return Promise.resolve(dd);
+    }
+    var batch=qs.slice(i,i+4);i+=4;
+    return Promise.all(batch.map(function(q){return doSearch(q)})).then(function(rs){
+      for(var k=0;k<rs.length;k++)for(var j=0;j<rs[k].length;j++)all.push(rs[k][j]);
+      log('  进度 '+Math.min(i,qs.length)+'/'+qs.length+' · 累计 '+all.length);
+      return sleep(120).then(next);
+    });
+  }
+  return next();
+}
+
+function computeEvidenceBudget(){
+  var p=parseInt($('sPower').value,10)||28;
+  if(p>=40) return 120;
+  if(p>=28) return 100;
+  return 80;
+}
+
+function calcESS(e){
+  var s=e.scores||{},v=0,w=0;
+  for(var k in ESS_W){var x=Number(s[k]);if(isFinite(x)){v+=x*ESS_W[k];w+=ESS_W[k]}}
+  if(w>0)return Math.max(0,Math.min(100,Math.round(v/w)));
+  var x2=Number(e.ess);return isFinite(x2)?Math.max(0,Math.min(100,Math.round(x2))):0;
+}
+
+function checkGates(e){
+  var domain=String(e.domain||'').trim();
+  var type=String(e.type||'').trim();
+  var entity=String(e.entity||'').trim();
+  var eventStr=String(e.event||'').trim();
+  var note=String(e.note||'');
+  var text=eventStr+' '+note+' '+entity+' '+domain+' '+type;
+
+  var g={tech:false,real:false,newInfo:false,verifiable:false};
+
+  if(/^(AI|半导体|GPU|数据中心|终端|政策|资本)$/i.test(domain)) g.tech=true;
+  if(!g.tech && /^(ai|semiconductor|gpu|datacenter|data center|terminal|policy|capital)$/i.test(domain)) g.tech=true;
+  if(!g.tech && /^(发布会|财报|技术节点|产品)$/i.test(type) && entity.length>=2) g.tech=true;
+  if(!g.tech && /^(launch|earnings|technology|product)$/i.test(type) && entity.length>=2) g.tech=true;
+  if(!g.tech){
+    if(/semiconductor|chip|gpu|cpu|asic|hbm|dram|nand|optical|photonic|interconnect|memory|storage|cloud|network|server|data center|datacenter|power|grid|lithograph|packag|foundry|fab|compute|accelerator|inference|training|AI|electronics|materials|robotics|software|platform|summit|expo|conference|半导体|芯片|算力|光互联|存储|数据中心|云|网络|电力|电网|电子|材料|机器人|软件|平台|峰会|展会|财报|发布|开发者/i.test(text)) g.tech=true;
+  }
+  if(entity.length>=2&&eventStr.length>=4) g.real=true;
+  var noteLen=note.trim().length;
+  var hasEvidence=Array.isArray(e.evidence)&&e.evidence.length>=1;
+  var timeStr=String(e.beijing_time||'').trim();
+  var hasParsableDate=timeStr&&timeStr!=='TBA'&&timeStr!=='—'&&
+    /(20\d{2})|(Q[1-4])|(January|February|March|April|May|June|July|August|September|October|November|December)|(\d{1,2}月)|(spring|summer|autumn|fall|winter)/i.test(timeStr);
+  if(noteLen>=5 || (hasEvidence&&hasParsableDate)) g.newInfo=true;
+  if(hasEvidence) g.verifiable=true;
+
+  return g;
+}
+function gatesPass(g){return !!(g.tech&&g.real&&g.newInfo&&g.verifiable)}
+
+function extractJSON(text){
+  if(!text)return null;
+  var t=String(text).trim();
+  t=t.replace(/^```(json)?/i,'').replace(/```\s*$/,'').trim();
+  try{return JSON.parse(t)}catch(e){}
+  var s=t.indexOf('{'),e2=t.lastIndexOf('}');
+  if(s>=0&&e2>s){try{return JSON.parse(t.slice(s,e2+1))}catch(e){}}
+  return null;
+}
+
+function buildExcludeHints(evts){
+  var entities={}, keywords={};
+  for(var i=0;i<evts.length;i++){
+    var e=evts[i];
+    if(e.entity){
+      var en=String(e.entity).trim().toLowerCase();
+      if(en.length>=2) entities[en]=1;
+    }
+    var words=String(e.event||'').toLowerCase().split(/\s+/).filter(function(w){return w.length>=4});
+    for(var j=0;j<Math.min(words.length,5);j++) keywords[words[j]]=1;
+  }
+  var preferRegions=[];
+  var regionHits={};
+  for(var r=0;r<evts.length;r++){
+    var rg=String(evts[r].region||'').toUpperCase();
+    if(rg) regionHits[rg]=1;
+  }
+  var allRegions=['Europe','Asia','"Asia Pacific"','"North America"'];
+  for(var ar=0;ar<allRegions.length;ar++){
+    var mapped=allRegions[ar];
+    var key=ar===0?'EU':ar===3?'US':ar===1?'ASIA':null;
+    if(key && !regionHits[key]) preferRegions.push(mapped);
+  }
+  var preferThemes=[];
+  var themePool=['semiconductor','"AI infrastructure"','"optical interconnect"','"HBM memory"','"silicon photonics"','"data center power"','"liquid cooling"','"advanced packaging"'];
+  for(var tp=0;tp<themePool.length;tp++){
+    var th=themePool[tp].replace(/["']/g,'').toLowerCase();
+    var thHit=false;
+    for(var k2 in keywords){
+      if(th.indexOf(k2)>=0 || k2.indexOf(th.split(/\s+/)[0])>=0){thHit=true;break}
+    }
+    if(!thHit) preferThemes.push(themePool[tp]);
+  }
+  return {
+    entities:entities,
+    keywords:keywords,
+    preferRegions:preferRegions,
+    preferThemes:preferThemes,
+    rotation: (excludeHints && typeof excludeHints.rotation==='number') ? (excludeHints.rotation+1)%3 : 0
+  };
+}
+
+function eventDedupKey(e){
+  var d=String(e.beijing_time||'').slice(0,10);
+  if(!d) d=String(e.beijing_time||'').slice(0,7);
+  var nm=String(e.event||'').trim().toLowerCase().replace(/\s+/g,'');
+  var en=String(e.entity||'').trim().toLowerCase();
+  return nm+'|'+en+'|'+d;
+}
+function mergeAndSort(oldList,newList){
+  var map={};
+  for(var i=0;i<oldList.length;i++){
+    var e=oldList[i];
+    var k=eventDedupKey(e);
+    map[k]=e;
+  }
+  var added=0, replaced=0, skipped=0;
+  for(var j=0;j<newList.length;j++){
+    var n=newList[j];
+    var k2=eventDedupKey(n);
+    if(map[k2]){
+      var oldE=map[k2];
+      var oldFull=(oldE.note&&oldE.note.length>=10)?1:0;
+      var newFull=(n.note&&n.note.length>=10)?1:0;
+      if((n.ess||0)>(oldE.ess||0) || (newFull>oldFull && (n.ess||0)>=((oldE.ess||0)-5))){
+        map[k2]=n; replaced++;
+      } else { skipped++; }
+      continue;
+    }
+    var nName=String(n.event||'').trim().toLowerCase().replace(/\s+/g,'');
+    var dup=false;
+    if(nName.length>=5){
+      for(var k3 in map){
+        var exName=String(map[k3].event||'').trim().toLowerCase().replace(/\s+/g,'');
+        if(exName===nName){
+          dup=true;
+          var exB=String(map[k3].beijing_time||'');
+          var nB=String(n.beijing_time||'');
+          if(nB && nB.length>exB.length){ map[k3]=n; replaced++; }
+          else { skipped++; }
+          break;
+        }
+      }
+    }
+    if(dup) continue;
+    map[k2]=n;
+    added++;
+  }
+  var out=[];
+  for(var kk in map) out.push(map[kk]);
+  out.sort(function(a,b){
+    var ta=a._ts_start==null?Infinity:a._ts_start;
+    var tb=b._ts_start==null?Infinity:b._ts_start;
+    if(ta!==tb)return ta-tb;
+    if(b.ess!==a.ess)return b.ess-a.ess;
+    return (IMPACT_RANK[b.impact]||0)-(IMPACT_RANK[a.impact]||0);
+  });
+  if(out.length>25){
+    var dropped=out.length-25;
+    out=out.slice(0,25);
+    log('[诊断] 主池超过 25，丢弃时间最远 '+dropped+' 条','warn');
+  }
+  return {merged:out, added:added, replaced:replaced, skipped:skipped};
+}
+
+function runPipeline(isIncremental){
+  if(running)return;
+  var rk=$('rKey').value.trim(),sk=$('sKey').value.trim(),md=$('rModel').value;
+  if(!rk||!sk){toast('请先配置 API Key',true);$('cfgPanel').classList.add('on');return}
+  if(!md){toast('请先点检测',true);$('cfgPanel').classList.add('on');return}
+  saveCfg();running=true;$('startBtn').disabled=true;
+  var cbtn=$('continueBtn'); if(cbtn) cbtn.disabled=true;
+  go(2);
+  if(!isIncremental){
+    $('log').innerHTML='';
+  } else {
+    log('————— 继续侦查（增量）—————','info');
+  }
+  $('log').style.display='block';
+  if(!isIncremental){
+    $('evList').innerHTML='<div class="empty">侦查中，请稍候…</div>';
+    $('shockList').innerHTML='<div class="empty">—</div>';
+    $('stats').innerHTML='';
+    corpusHistory=[];
+  }
+
+  var MAX=computeEvidenceBudget();
+  log('证据预算：'+MAX+' 条（侦察强度 '+$('sPower').value+'）','info');
+  if(isIncremental){
+    log('已有主池：'+events.length+' 条 · 监控：'+shocks.length+' 条','info');
+    if(excludeHints){
+      log('排除提示：entity 命中 '+Object.keys(excludeHints.entities).length+' 个 · 关键词 '+Object.keys(excludeHints.keywords).length+' 个','info');
+    }
+  }
+
+  runSearchTensor().then(function(hits){
+    if(!hits.length)throw new Error('未获取到任何搜索结果，请检查 API Key / 额度 / 代理');
+    var prioritized=prioritizeHits(hits);
+
+    hitPool=prioritized;
+    var corpusSlice=prioritized.slice(0,MAX);
+    var baseOffset=0;
+    if(isIncremental){
+      baseOffset=corpusHistory.length;
+      corpusHistory=corpusHistory.concat(corpusSlice);
+      corpusHits=corpusHistory;
+      log('语料累积：本轮新增 '+corpusSlice.length+' 条，历史共 '+corpusHistory.length+' 条','info');
+    } else {
+      corpusHistory=corpusSlice.slice();
+      corpusHits=corpusHistory;
+    }
+
+    log('优先级排序完成：'+prioritized.length+' 条 · 送入语料 '+corpusSlice.length+' 条','ok');
+    var corpus='';
+    for(var i=0;i<corpusSlice.length;i++){
+      var h=corpusSlice[i];
+      corpus+='['+(i+1)+'] '+String(h.title||'').slice(0,110)+'\n';
+      corpus+=(h.url||'')+'\n';
+      corpus+=String(h.content||'').replace(/\s+/g,' ').slice(0,380)+'\n\n';
+    }
+    log('语料构建完成：'+corpusSlice.length+' 条','ok');
+    log('调用推理模型进行 ESS 提取…','info');
+
+    var today=new Date().toISOString().slice(0,10);
+    var sysPrompt=buildSysPrompt(today,isIncremental);
+    return callLLM(sysPrompt,'以下是联网搜索结果（编号即 evidence 引用编号）：\n\n'+corpus,{maxTokens:8000,temperature:0.2}).then(function(raw){
+      log('[诊断] 模型 raw 长度：'+((raw||'').length)+' 字符','info');
+      if(!raw||!String(raw).trim()){
+        log('[诊断] ⚠ 模型返回空响应','err');
+        throw new Error('模型返回空响应');
+      }
+      var data=extractJSON(raw);
+      if(!data){
+        log('[诊断] ⚠ 响应无法解析为 JSON，片段：'+String(raw).replace(/\s+/g,' ').slice(0,300),'err');
+        log('尝试 JSON 修复…','warn');
+        return callLLM('你是 JSON 修复器。把用户内容中描述的 JSON 对象原样输出为合法 JSON，不要任何解释。',raw.slice(0,8000),{maxTokens:8000,temperature:0}).then(function(fix){
+          data=extractJSON(fix);
+          if(!data)throw new Error('模型返回无法解析为 JSON（修复也失败）');
+          return applyResult(data,isIncremental,baseOffset);
+        });
+      }
+      return applyResult(data,isIncremental,baseOffset);
+    });
+  }).catch(function(err){
+    log('✖ 侦查失败：'+err.message,'err');
+    toast('失败：'+err.message,true);
+    if(!isIncremental){
+      $('evList').innerHTML='<div class="empty" style="color:#f87171">'+esc(err.message)+'</div>';
+    }
+  }).then(function(){running=false;$('startBtn').disabled=false; if(cbtn) cbtn.disabled=false;});
+}
+
+function buildSysPrompt(today,isIncremental){
+  var excludeSection='';
+  if(isIncremental && events.length){
+    var lines=[];
+    for(var i=0;i<Math.min(events.length,20);i++){
+      lines.push((i+1)+'. '+String(events[i].event||'')+' — '+String(events[i].entity||''));
+    }
+    excludeSection='\n【已有主池，请勿重复输出以下事件】\n'+lines.join('\n')+
+      '\n\n请优先提取与上述不同的未来事件。若语料里只有相同事件，宁可少输出也不要重复。\n';
+  }
+  return [
+    '你是顶级科技情报分析师 + ESS 事件筛选引擎。',
+    '任务：从联网搜索结果中，提取「未来 0-180 天内即将发生、且可能显著改变市场预期的重大科技事件」。',
+    '【当前日期】'+today,
+    '【时间基准】所有日期判断基于上方"当前日期"。',
+    '',
+    '【绝对禁止（违反会导致整条被丢弃）】',
+    '1. 禁止输出已经结束的活动（会期结束日 < 当前日期）。',
+    '2. 禁止输出只有开始日且开始日 < 当前日期、且没有"进行中"证据的事件。',
+    '3. 若语料是回顾、去年同期、已闭幕报道，不要当未来事件。',
+    '4. 只输出「开始日或会期与今天及未来 0-180 天有交集」的事件。',
+    excludeSection,
+    '【ESS 六维（0-100 分）】',
+    'market 市场重新定价 · chain 产业链穿透 · entity 主体重要性 · gap 预期差 · policy 政策杠杆 · timing 时间紧迫',
+    '',
+    '【打分指引】',
+    '对有明确未来日期 + 可验证来源的日程型活动（earnings call / investor day / developer conference / keynote / product launch）：',
+    '- timing 不应无故压到 40 以下（时间已确认）',
+    '- entity 反映主体重要性，不应一概 40 分',
+    '- market 反映市场冲击力，若证据明显指向产业链，不应低于 50',
+    '对远期规划、无日期通稿、纯市场传闻：ESS 应保守，或进 shock 池。',
+    '',
+    '【domain 字段必须从以下枚举里选】',
+    'domain ∈ { AI, 半导体, GPU, 数据中心, 终端, 政策, 资本 }',
+    '',
+    '【type 字段建议从以下枚举里选】',
+    'type ∈ { 发布会, 财报, 政策, 融资, 技术节点, 并购, 人事, 产品 }',
+    '',
+    '【提取广度（重要）】',
+    '语料中凡有明确未来日期的会议/财报/开发者活动/产品发布/监管决定，都应尝试提取。',
+    '既包括知名大厂的旗舰活动，也包括光互联、电网/电力、液冷、先进封装、CPO、硅光等主题上你可能不熟悉但产业链关键的专业峰会。',
+    '只要证据里有明确日程 + 可验证来源，就应提取，不要因为"没听说过"就跳过。',
+    '',
+    '【判定准则】',
+    '1. 必须有搜索证据支撑，绝不编造日期、主体、数字。',
+    '2. 只根据语料证据提取，禁止把通稿中的远期规划当已确认日程。',
+    '3. 同一事件必须合并；同一活动不同场次分别输出。',
+    '4. 每条事件必须给出 evidence 数组，引用上方编号，至少 1 条。',
+    '',
+    '【输出数量目标】',
+    '在证据充分的前提下，main 尽量输出 10-15 条未来事件；',
+    '证据不足时宁可少输出，禁止编造日期、主体、会名。',
+    '',
+    '【输出要求】只输出一个 JSON 对象，不要 markdown 代码块，不要任何解释文字。',
+    '{',
+    '  "main": [',
+    '    {',
+    '      "event": "事件名（中文，≤28字）",',
+    '      "entity": "主体（公司/机构）",',
+    '      "type": "发布会|财报|政策|融资|技术节点|并购|人事|产品",',
+    '      "domain": "AI|半导体|GPU|数据中心|终端|政策|资本",',
+    '      "region": "US|CN|TW|KR|JP|EU|Global",',
+    '      "beijing_time": "YYYY-MM-DD 或 YYYY-MM-DD ~ YYYY-MM-DD 或 YYYY-MM",',
+    '      "date_status": "Confirmed|Expected|TBA",',
+    '      "impact": "I1|I2|I3|I4|I5",',
+    '      "scores": {"market":0,"chain":0,"entity":0,"gap":0,"policy":0,"timing":0},',
+    '      "evidence": [1,5],',
+    '      "note": "一句话核心看点（≤40字）"',
+    '    }',
+    '  ],',
+    '  "shock": [',
+    '    {"event":"非固定监控事件","entity":"主体","status":"当前状态","ess":0,"impact":"I4|I5"}',
+    '  ]',
+    '}',
+    '',
+    '【impact】I5 全球级 · I4 行业级 · I3 板块级 · I2/I1 不进主池',
+    'main 输出 6-15 条，shock 输出 0-10 条。'
+  ].join('\n');
+}
+
+function applyResult(data,isIncremental,baseOffset){
+  var norm=normalize(data,baseOffset);
+  if(!isIncremental){
+    events=norm.main;
+    shocks=norm.shock;
+    render();
+    log('侦察完成 → 主池 '+events.length+' · 非固定监控 '+shocks.length,'ok');
+    toast('侦查完成：主池 '+events.length+' 条');
+  } else {
+    var merged=mergeAndSort(events,norm.main);
+    log('[增量合并] 本轮新增 '+merged.added+' · 更新 '+merged.replaced+' · 跳过重复 '+merged.skipped,'ok');
+    events=merged.merged;
+    var smap={};
+    for(var i=0;i<shocks.length;i++){ smap[String(shocks[i].event||'').toLowerCase()]=shocks[i]; }
+    for(var j=0;j<norm.shock.length;j++){
+      var s=norm.shock[j];
+      var sk=String(s.event||'').toLowerCase();
+      if(!smap[sk]) smap[sk]=s;
+    }
+    var slist=[];
+    for(var k in smap) slist.push(smap[k]);
+    shocks=slist.slice(0,12);
+    render();
+    log('继续侦查完成 → 主池 '+events.length+' · 非固定监控 '+shocks.length,'ok');
+    toast('继续侦查：新增 '+merged.added+' 条 · 主池共 '+events.length+' 条');
+  }
+}
+
+function start(){
+  if(running)return;
+  excludeHints=null;
+  events=[];shocks=[];
+  corpusHistory=[];
+  runPipeline(false);
+}
+function continueScan(){
+  if(running)return;
+  if(!events.length){
+    toast('主池为空，先执行全量侦查');
+    start();
+    return;
+  }
+  excludeHints=buildExcludeHints(events);
+  runPipeline(true);
+}
+
+function normalize(raw,baseOffset){
+  baseOffset=baseOffset||0;
+  var mainArr=Array.isArray(raw.main)?raw.main:[];
+  var shockArr=Array.isArray(raw.shock)?raw.shock:[];
+
+  log('[诊断] 模型返回：main='+mainArr.length+' · shock='+shockArr.length,'info');
+
+  var now=new Date();
+  var todayMidnight=new Date(now.getFullYear(),now.getMonth(),now.getDate());
+  var todayTs=todayMidnight.getTime();
+  var windowEndTs=todayTs+180*86400000;
+
+  var all=[];
+  var gateRejects={tech:0,real:0,newInfo:0,verifiable:0,total:0,samples:[]};
+  var essValues=[];
+  var expiredCount=0;
+  var outsideWindowCount=0;
+  var noDateCount=0;
+
+  for(var i=0;i<mainArr.length;i++){
+    var e=mainArr[i];
+    var impact=/^I[1-5]$/.test(String(e.impact))?String(e.impact):'I3';
+    var ess=calcESS(e);
+    essValues.push(ess);
+
+    var gates=checkGates(e);
+    if(!gatesPass(gates)){
+      gateRejects.total++;
+      var reasons=[];
+      if(!gates.tech){gateRejects.tech++;reasons.push('非科技(domain='+(e.domain||'空')+',type='+(e.type||'空')+')');}
+      if(!gates.real){gateRejects.real++;reasons.push('非真实');}
+      if(!gates.newInfo){gateRejects.newInfo++;reasons.push('无新增');}
+      if(!gates.verifiable){gateRejects.verifiable++;reasons.push('不可验证');}
+      if(gateRejects.samples.length<8){
+        gateRejects.samples.push({event:String(e.event||'').slice(0,40),reasons:reasons.join(' / ')});
+      }
+      continue;
+    }
+
+    var tr=parseTimeRange(String(e.beijing_time||''));
+    var dateStatus=String(e.date_status||'TBA');
+
+    if(tr.end!==null && tr.end<todayTs){ expiredCount++; continue; }
+    if(tr.start!==null && tr.end!==null && tr.start===tr.end && tr.start<todayTs){ expiredCount++; continue; }
+    if(tr.start!==null && tr.start>windowEndTs){ outsideWindowCount++; continue; }
+    if(tr.start===null){ noDateCount++; }
+
+    var evid=Array.isArray(e.evidence)?e.evidence.slice():[];
+    if(baseOffset>0){
+      evid=evid.map(function(x){ return (typeof x==='number'?x+baseOffset:x); });
+    }
+
+    all.push({
+      event:String(e.event||'').slice(0,60),
+      entity:String(e.entity||'—'),
+      type:String(e.type||'—'),
+      domain:String(e.domain||'—'),
+      region:String(e.region||'—'),
+      beijing_time:String(e.beijing_time||'TBA'),
+      date_status:dateStatus,
+      impact:impact,ess:ess,
+      gates:gates,
+      evidence:evid,
+      note:String(e.note||''),
+      _ts_start:tr.start,
+      _ts_end:tr.end,
+      _precision:tr.precision
+    });
+  }
+
+  var essBuckets={low:0,mid:0,high:0};
+  for(var k=0;k<essValues.length;k++){
+    if(essValues[k]<50) essBuckets.low++;
+    else if(essValues[k]<70) essBuckets.mid++;
+    else essBuckets.high++;
+  }
+  if(essValues.length){
+    var avgEss=Math.round(essValues.reduce(function(a,b){return a+b},0)/essValues.length);
+    var maxEss=Math.max.apply(null,essValues);
+    log('[诊断] ESS 分布：低(<50)='+essBuckets.low+' · 中(50-69)='+essBuckets.mid+' · 高(≥70)='+essBuckets.high+' · 均分='+avgEss+' · 最高='+maxEss,'info');
+  }
+
+  if(gateRejects.total){
+    log('[诊断] 四重闸门拦截 '+gateRejects.total+' 条：非科技 '+gateRejects.tech+' / 非真实 '+gateRejects.real+' / 无新增 '+gateRejects.newInfo+' / 不可验证 '+gateRejects.verifiable,'warn');
+    for(var gs=0;gs<gateRejects.samples.length;gs++){
+      log('    ✖ 「'+gateRejects.samples[gs].event+'」→ '+gateRejects.samples[gs].reasons,'warn');
+    }
+  } else if(mainArr.length){
+    log('[诊断] 四重闸门：'+mainArr.length+' 条全部通过','ok');
+  }
+
+  if(expiredCount) log('[诊断] 时间过滤：已过期 '+expiredCount+' 条已丢弃','warn');
+  if(outsideWindowCount) log('[诊断] 时间过滤：超出 180 天窗口 '+outsideWindowCount+' 条已丢弃','warn');
+  if(noDateCount) log('[诊断] 无日期事件 '+noDateCount+' 条（保留但 ESS 保守）','info');
+
+  all.sort(function(a,b){
+    var ta=a._ts_start===null?Infinity:a._ts_start;
+    var tb=b._ts_start===null?Infinity:b._ts_start;
+    if(ta!==tb)return ta-tb;
+    if(b.ess!==a.ess)return b.ess-a.ess;
+    return (IMPACT_RANK[b.impact]||0)-(IMPACT_RANK[a.impact]||0);
+  });
+
+  var primary=all.filter(function(x){return x.ess>=70});
+  var secondary=all.filter(function(x){return x.ess>=60&&x.ess<70});
+  var tertiary=all.filter(function(x){return x.ess>=55&&x.ess<60});
+
+  log('[诊断] 过闸门：'+all.length+' 条 · ESS≥70: '+primary.length+' · 60-69: '+secondary.length+' · 55-59: '+tertiary.length,'info');
+
+  var main;
+  if(primary.length>=8){
+    main=primary.slice(0,15);
+  } else {
+    var need=Math.max(12-primary.length,2);
+    var takeFromSecond=Math.min(need,secondary.length);
+    main=primary.concat(secondary.slice(0,takeFromSecond));
+    need-=takeFromSecond;
+    if(main.length<8 && tertiary.length){
+      var takeFromThird=Math.min(8-main.length,tertiary.length);
+      main=main.concat(tertiary.slice(0,takeFromThird));
+      if(takeFromThird>0){
+        log('[诊断] 主档+次级仍不足 8，补入 '+takeFromThird+' 条 ESS 55-59 的事件','warn');
+      }
+    }
+    if(takeFromSecond>0){
+      log('[诊断] 主档不足 8，补入 '+takeFromSecond+' 条 ESS 60-69 的次级事件','info');
+    }
+    main=main.slice(0,15);
+    main.sort(function(a,b){
+      var ta=a._ts_start===null?Infinity:a._ts_start;
+      var tb=b._ts_start===null?Infinity:b._ts_start;
+      if(ta!==tb)return ta-tb;
+      if(b.ess!==a.ess)return b.ess-a.ess;
+      return (IMPACT_RANK[b.impact]||0)-(IMPACT_RANK[a.impact]||0);
+    });
+  }
+
+  log('[诊断] 本轮提取主池：'+main.length+' 条','ok');
+
+  var shock=[];
+  for(var j=0;j<shockArr.length&&j<8;j++){
+    var s=shockArr[j];
+    shock.push({
+      event:String(s.event||'—'),
+      entity:String(s.entity||'—'),
+      status:String(s.status||'—'),
+      ess:Math.max(0,Math.min(100,Number(s.ess)||0)),
+      impact:/^I[1-5]$/.test(String(s.impact))?String(s.impact):'I4'
+    });
+  }
+  return {main:main,shock:shock};
+}
+
+function essClass(v){return v>=85?'b-r':v>=70?'b-o':'b-b'}
+function impClass(v){var r=IMPACT_RANK[v]||0;return r>=5?'b-p':r>=4?'b-r':r>=3?'b-o':'b-d'}
+function statusClass(s){var x=String(s).toLowerCase();if(x.indexOf('confirm')>=0)return'b-g';if(x.indexOf('expect')>=0)return'b-o';return'b-b'}
+function gateDots(g){
+  var keys=['tech','real','newInfo','verifiable'],html='<span class="dots">';
+  for(var i=0;i<keys.length;i++)html+='<span class="dot'+(g[keys[i]]?' on':'')+'"></span>';
+  return html+'</span>';
+}
+function render(){
+  var total=events.length,high=0,sum=0;
+  for(var i=0;i<events.length;i++){if(IMPACT_RANK[events[i].impact]>=4)high++;sum+=events[i].ess}
+  var avg=total?Math.round(sum/total):0;
+  $('stats').innerHTML='<div class="stat"><b>'+total+'</b><span>主池事件</span></div><div class="stat"><b>'+high+'</b><span>I4+ 高冲击</span></div><div class="stat"><b>'+avg+'</b><span>平均 ESS</span></div><div class="stat"><b>'+shocks.length+'</b><span>非固定监控</span></div>';
+  if(!events.length){
+    $('evList').innerHTML='<div class="empty">本次未筛出符合条件的未来事件<br>查看上方日志的 [诊断] 输出</div>';
+  }else{
+    var html='';
+    for(var k=0;k<events.length;k++){
+      var e=events[k];
+      html+='<div class="ev-card" onclick="detail('+k+')">'+
+        '<div class="ev-head">'+
+          '<span class="ev-idx">'+String(k+1).padStart(2,'0')+'</span>'+
+          '<span class="badge '+essClass(e.ess)+'">ESS '+e.ess+'</span>'+
+          '<span class="badge '+impClass(e.impact)+'">'+esc(e.impact)+'</span>'+
+          '<span class="badge '+statusClass(e.date_status)+'">'+esc(e.date_status)+'</span>'+
+          gateDots(e.gates)+
+        '</div>'+
+        '<div class="ev-title">'+esc(e.event)+'</div>'+
+        '<div class="ev-meta"><span>'+esc(e.entity)+'</span><span class="sep">·</span><span>'+esc(e.type)+'</span><span class="sep">·</span><span>'+esc(e.domain)+'</span></div>'+
+        '<div class="ev-time">📅 '+esc(e.beijing_time)+'</div>'+
+        (e.note?'<div class="ev-note">'+esc(e.note)+'</div>':'')+
+        '<div class="ev-cta">点击进入分析 →</div>'+
+      '</div>';
+    }
+    $('evList').innerHTML=html;
+  }
+  if(!shocks.length){
+    $('shockList').innerHTML='<div class="empty">空</div>';
+  }else{
+    var h2='';
+    for(var m=0;m<shocks.length;m++){
+      var s=shocks[m];
+      h2+='<div class="ev-card static">'+
+        '<div class="ev-head"><span class="badge b-o">ESS '+s.ess+'</span><span class="badge '+impClass(s.impact)+'">'+esc(s.impact)+'</span></div>'+
+        '<div class="ev-title">'+esc(s.event)+'</div>'+
+        '<div class="ev-meta"><span>'+esc(s.entity)+'</span></div>'+
+        '<div class="ev-time">'+esc(s.status)+'</div>'+
+      '</div>';
+    }
+    $('shockList').innerHTML=h2;
+  }
+}
+function md(src){
+  var lines=esc(src).split('\n'),out='',inList=false;
+  for(var i=0;i<lines.length;i++){
+    var ln=lines[i];
+    ln=ln.replace(/\*\*(.+?)\*\*/g,'<b>$1</b>').replace(/`(.+?)`/g,'<code>$1</code>');
+    if(/^\s*[-*•]\s+/.test(ln)){if(!inList){out+='<ul>';inList=true}out+='<li>'+ln.replace(/^\s*[-*•]\s+/,'')+'</li>';continue}
+    if(inList){out+='</ul>';inList=false}
+    if(/^####\s+/.test(ln))out+='<h4>'+ln.replace(/^####\s+/,'')+'</h4>';
+    else if(/^###\s+/.test(ln))out+='<h4>'+ln.replace(/^###\s+/,'')+'</h4>';
+    else if(/^##\s+/.test(ln))out+='<h3>'+ln.replace(/^##\s+/,'')+'</h3>';
+    else if(/^#\s+/.test(ln))out+='<h2>'+ln.replace(/^#\s+/,'')+'</h2>';
+    else if(ln.trim())out+='<p>'+ln+'</p>';
+  }
+  if(inList)out+='</ul>';
+  return out;
+}
+function detail(idx){
+  var e=events[idx];if(!e)return;
+  go(3);
+  $('dTitle').textContent=e.event||'深度分析';
+  $('dSub').textContent=e.entity+' · '+e.beijing_time+' · ESS '+e.ess+' · '+e.impact;
+  $('dBody').innerHTML='<div class="card"><div class="empty">推理模型分析中，请稍候…</div></div>';
+  var SYS=['你是 PAGE3 深度分析模块。用中文输出 Markdown。','严格按以下六段结构输出：','','## 一、事件基本资料','## 二、市场预期 vs 预期差','## 三、多空情景推演（概率和=100%）','## 四、Risk Value（-100~+100）与六维拆解','## 五、Surprise Score（S1-S5）','## 六、一句话结论（≤30字）'].join('\n');
+  var USER='待分析事件：\n'+JSON.stringify({event:e.event,entity:e.entity,type:e.type,domain:e.domain,region:e.region,beijing_time:e.beijing_time,date_status:e.date_status,impact:e.impact,ess:e.ess,note:e.note,evidence:e.evidence},null,2);
+  callLLM(SYS,USER,{maxTokens:3500,temperature:0.4}).then(function(txt){
+    var refs=[];
+    for(var i=0;i<(e.evidence||[]).length&&refs.length<6;i++){
+      var h=corpusHits[e.evidence[i]-1];
+      if(h)refs.push(h);
+    }
+    var evHtml=refs.length?'<div class="card" style="margin-top:12px"><div class="sect">证据来源</div>'+refs.map(function(h){return'<div class="ev-ref"><div style="color:#c3cfe0">'+esc(h.title||'—')+'</div>'+(h.url?'<a href="'+esc(h.url)+'" target="_blank" rel="noopener">'+esc(h.url)+'</a>':'')+'</div>'}).join('')+'</div>':'';
+    $('dBody').innerHTML='<div class="card"><div class="summary">'+md(txt)+'</div></div>'+
+      '<div class="card" style="margin-top:12px"><div class="sect">事件元数据</div><dl class="kv">'+
+      '<dt>主体</dt><dd>'+esc(e.entity)+'</dd>'+
+      '<dt>类型</dt><dd>'+esc(e.type)+'</dd>'+
+      '<dt>领域</dt><dd>'+esc(e.domain)+'</dd>'+
+      '<dt>地区</dt><dd>'+esc(e.region)+'</dd>'+
+      '<dt>北京时间</dt><dd>'+esc(e.beijing_time)+'</dd>'+
+      '<dt>日期状态</dt><dd>'+esc(e.date_status)+'</dd>'+
+      '<dt>Impact</dt><dd>'+esc(e.impact)+'</dd>'+
+      '<dt>ESS</dt><dd>'+e.ess+'</dd>'+
+      '<dt>四重闸门</dt><dd>科技 '+(e.gates.tech?'✅':'❌')+' · 真实 '+(e.gates.real?'✅':'❌')+' · 新增 '+(e.gates.newInfo?'✅':'❌')+' · 可验证 '+(e.gates.verifiable?'✅':'❌')+'</dd>'+
+      '</dl></div>'+evHtml;
+  }).catch(function(err){$('dBody').innerHTML='<div class="card"><div class="empty" style="color:#f87171">'+esc(err.message)+'</div></div>'});
+}
+onProv();loadCfg();
+</script>
+</body>
+</html>
